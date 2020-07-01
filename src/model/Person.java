@@ -1,11 +1,13 @@
 package model;
 
+import util.eGender;
+
 import java.util.Date;
 
 public abstract class Person {
     String firstName;
     String lastName;
-    String gender;
+    eGender gender;
     String address;
     String phoneNumber;
     String personalId;
@@ -28,11 +30,11 @@ public abstract class Person {
         this.lastName = lastName;
     }
 
-    public String getGender() {
+    public eGender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(eGender gender) {
         this.gender = gender;
     }
 
