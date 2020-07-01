@@ -1,13 +1,13 @@
 package model;
 
 public class CEO extends Employee{
-    int[] teamLeadersIds;
+    TeamLeader[] teamLeaders;
 
-    public int[] getTeamLeadersIds() {
-        return teamLeadersIds;
+    public TeamLeader[] getTeamLeaders() {
+        return teamLeaders;
     }
 
-    public void setTeamLeadersIds(int[] teamLeadersIds) {
-        this.teamLeadersIds = teamLeadersIds;
+    public void setTeamLeaders(TeamLeader[] teamLeaders) {
+        this.teamLeaders = teamLeaders;
     }
 }
