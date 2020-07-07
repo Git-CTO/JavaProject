@@ -12,8 +12,19 @@ public class Task {
     private Date ActualDate = null;
     private eStatus status;
     private ePriority priority;
-    private String Details;
+    private String details;
     private String projectName;
+    
+    public String toString(){
+        return
+                "Task Num: " + taskNum + "\n"
+                + "Start Date: " + startDate + "\n"
+                        + "End Date: " + endDate + "\n"
+                        + "Priority: " + priority + "\n"
+                        + "Details: " + details + "\n"
+                        + "Project Name: " + projectName + "\n"
+                        + "Status: " + status + "\n";
+    }
 
     public int getTaskNum() {
         return taskNum;
@@ -64,11 +75,11 @@ public class Task {
     }
 
     public String getDetails() {
-        return Details;
+        return details;
     }
 
     public void setDetails(String details) {
-        Details = details;
+        this.details = details;
     }
 
     public String getProjectName() {

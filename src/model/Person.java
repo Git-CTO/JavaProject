@@ -14,6 +14,14 @@ public abstract class Person {
     Date dateOfBirth;
     int age;
 
+    public String toString(){
+        return "Hi " + lastName + " " + firstName + "!" + "\n\n"
+                + "Your Details: " + "\n"
+                + "Gender: " + gender + "\n"
+                + "Address: " + address + "\n"
+                + "PhoneNumber: " + phoneNumber + "\n"
+                + "ID: " + personalId + "\n";
+    }
     public String getFirstName() {
         return firstName;
     }
