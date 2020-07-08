@@ -1,86 +1,51 @@
 package database;
 
 import com.google.gson.Gson;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import model.Employee;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-class BagOfPrimitives {
-    private int value1 = 1;
-    private String value2 = "abc";
-    private transient int value3 = 3;
+import java.lang.reflect.Type;
+import java.util.List;
 
-    public int getValue1() {
-        return value1;
-    }
 
-    public void setValue1(int value1) {
-        this.value1 = value1;
-    }
-
-    public String getValue2() {
-        return value2;
-    }
-
-    public void setValue2(String value2) {
-        this.value2 = value2;
-    }
-
-    public int getValue3() {
-        return value3;
-    }
-
-    public void setValue3(int value3) {
-        this.value3 = value3;
-    }
-public String toString(){
-        return "iam object";
-}
-    BagOfPrimitives() {
-    }
-}
 public class DataService {
-    public static void main( String[] args )
-    {
 
-        BagOfPrimitives obj = new BagOfPrimitives();
+    public static List<Employee> takeDataFromDb() {
         Gson gson = new Gson();
-        String json = gson.toJson(obj);
-        System.out.println("result: " + json);
+        JsonReader reader = null;
 
-        BagOfPrimitives obj2 = gson.fromJson(json, BagOfPrimitives.class);
-        System.out.println("Deserialization: " + obj2.toString());
+        try {
+            reader = new JsonReader(new FileReader("resources\\employees.json"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        //First Employee
-        JSONObject employeeDetails = new JSONObject();
-        employeeDetails.put("firstName", "Lokesh");
-        employeeDetails.put("lastName", "Gupta");
-        employeeDetails.put("website", "howtodoinjava.com");
+        JsonArray jsonArray = JsonParser.parseReader(reader).getAsJsonArray();
+        Type employeeListType = new TypeToken<List<Employee>>(){}.getType();
+        List<Employee> employeeList = gson.fromJson(jsonArray, employeeListType);
 
-        JSONObject employeeObject = new JSONObject();
-        employeeObject.put("employee", employeeDetails);
+        return employeeList;
+    }
 
-        //Second Employee
-        JSONObject employeeDetails2 = new JSONObject();
-        employeeDetails2.put("firstName", "Brian");
-        employeeDetails2.put("lastName", "Schultz");
-        employeeDetails2.put("website", "example.com");
+    public static void addEmployee(Employee employee) {
+        List<Employee> employeeList = takeDataFromDb();
+        employeeList.add(employee);
+        saveToDB(employeeList);
+    }
 
-        JSONObject employeeObject2 = new JSONObject();
-        employeeObject2.put("employee", employeeDetails2);
+    public static void saveToDB(List<Employee> employeeList) {
+        Gson gson = new Gson();
 
-        //Add employees to list
-        JSONArray employeeList = new JSONArray();
-        employeeList.add(employeeObject);
-        employeeList.add(employeeObject2);
-
-        //Write JSON file
-        try (FileWriter file = new FileWriter("employees.json")) {
-
-            file.write(employeeList.toJSONString());
+        try (FileWriter file = new FileWriter("resources\\employees.json")) {
+            file.write(gson.toJson(employeeList));
             file.flush();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-  package model;
+package model;
 
 import java.util.Date;
 
@@ -7,21 +7,21 @@ public class Employee extends Person {
     Date startDate;
     String salary;
     int numOfTasks;
+    static int employeeCount;
 
-    public Employee(){
+    public Employee() {
         startDate = new Date();
+        employeeId = "" + ++employeeCount;
+        numOfTasks = 0;
     }
 
-    public String toString(){
+    public String toString() {
         return super.toString() +
-                "Employee Id: " + employeeId + "\n"
-                + "Your Start Date in Company: " + startDate + '\n'
-                + "Your Salary: " + salary + '\n'
-                + "Num Of Task: " + numOfTasks + '\n';
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
+                "\n--Employee card information--\n"
+                + "#Employee Id: " + employeeId + "\n"
+                + "#Your Start Date in Company: " + startDate + '\n'
+                + "#Your Salary: " + salary + '\n'
+                + "#Num Of Tasks: " + numOfTasks + '\n';
     }
 
     public Employee setEmployeeId(String employeeId) {
@@ -29,17 +29,9 @@ public class Employee extends Person {
         return this;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
     public Employee setStartDate(Date startDate) {
         this.startDate = startDate;
         return this;
-    }
-
-    public String getSalary() {
-        return salary;
     }
 
     public Employee setSalary(String salary) {
@@ -47,12 +39,12 @@ public class Employee extends Person {
         return this;
     }
 
-    public int getNumOfTasks() {
-        return numOfTasks;
-    }
-
     public Employee setNumOfTasks(int numOfTasks) {
         this.numOfTasks = numOfTasks;
         return this;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
     }
 }

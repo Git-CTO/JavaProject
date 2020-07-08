@@ -2,8 +2,6 @@ package model;
 
 import util.eGender;
 
-import java.util.Date;
-
 public abstract class Person {
     String firstName;
     String lastName;
@@ -11,78 +9,58 @@ public abstract class Person {
     String address;
     String phoneNumber;
     String personalId;
-    Date dateOfBirth;
     int age;
 
     public String toString(){
-        return "Hi " + lastName + " " + firstName + "!" + "\n\n"
-                + "Your Details: " + "\n"
-                + "Gender: " + gender + "\n"
-                + "Address: " + address + "\n"
-                + "PhoneNumber: " + phoneNumber + "\n"
-                + "ID: " + personalId + "\n";
-    }
-    public String getFirstName() {
-        return firstName;
+        return "\n\nHi " + getName() + "!" + "\n\n"
+                + "--Personal Information-- " + "\n"
+                + "#Gender: " + gender + "\n"
+                + "#Address: " + address + "\n"
+                + "#PhoneNumber: " + phoneNumber + "\n"
+                + "#ID: " + personalId + "\n";
     }
 
-    public void setFirstName(String firstName) {
+    public Person setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
+    public Person setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
-    public eGender getGender() {
-        return gender;
-    }
-
-    public void setGender(eGender gender) {
+    public Person setGender(eGender gender) {
         this.gender = gender;
+        return this;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
+    public Person setAddress(String address) {
         this.address = address;
+        return this;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
+    public Person setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public Person setPersonalId(String personalId) {
+        this.personalId = personalId;
+        return this;
+    }
+
+    public Person setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    public String getName() {
+        return firstName + " " + lastName;
     }
 
     public String getPersonalId() {
         return personalId;
     }
 
-    public void setPersonalId(String personalId) {
-        this.personalId = personalId;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 }

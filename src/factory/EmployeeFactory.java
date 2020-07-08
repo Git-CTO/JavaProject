@@ -12,9 +12,8 @@ public class EmployeeFactory {
                 return new CEO();
             case TeamLeader:
                 return new TeamLeader();
-            case junior:
+            default:
                 return new Employee();
         }
-       return new Employee();
     }
 }
