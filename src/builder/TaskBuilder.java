@@ -14,7 +14,8 @@ public class TaskBuilder {
         task.setProjectName(inputMap.get(eTaskInputFields.ProjectName))
                 .setDetails(inputMap.get(eTaskInputFields.Details))
                 .setEndDate(new GregorianCalendar(2030, 1, 20).getTime())
-                .setPriority(ePriority.values()[Integer.parseInt(inputMap.get(eTaskInputFields.Priority))]);
+                .setPriority(ePriority.values()[Integer.parseInt(inputMap.get(eTaskInputFields.Priority))])
+                .setTaskId(inputMap.get(eTaskInputFields.TaskId));
 
         return task;
     }

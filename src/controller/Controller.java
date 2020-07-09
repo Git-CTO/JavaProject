@@ -5,8 +5,8 @@ import builder.TaskBuilder;
 import database.DataService;
 import model.Employee;
 import model.Task;
-import model.TeamLeader;
 import util.eRole;
+import util.eStatus;
 import view.EmployeeCreationUi;
 import view.TaskCreationUI;
 
@@ -101,5 +101,17 @@ public class Controller {
                 collect(Collectors.toList());
 
         return teamLeadersIds;
+    }
+
+    public static void changeTaskStatus(String employeeId, String taskId, eStatus status){
+        List<Task> allTasks = getAllTasks();
+        List<Task> taskOfEmployee = allTasks.stream().
+                filter(task ->
+                        task.getTaskId().equals(taskId) && task.getEmployeeId().equals(employeeId)).
+                collect(Collectors.toList());
+        if(taskOfEmployee.size()>0){
+            taskOfEmployee.get(0).setStatus(status);
+            DataService.saveTasksToDB(allTasks);
+        }
     }
 }

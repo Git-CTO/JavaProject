@@ -4,5 +4,6 @@ public enum eTaskInputFields {
     ProjectName,
     Details,
     EndDate,
-    Priority
+    Priority,
+    TaskId
 }

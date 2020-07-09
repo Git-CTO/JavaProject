@@ -13,6 +13,7 @@ public class Task {
     private String details;
     private String projectName;
     private String employeeId;
+    private String taskId;
 
     public Task() {
         startDate = new Date();
@@ -21,6 +22,7 @@ public class Task {
     public String toString() {
         return
                 "Employee Id: " + employeeId + "\n"
+                        + "Task Id: " + taskId + "\n"
                         + "Start Date: " + startDate + "\n"
                         + "End Date: " + endDate + "\n"
                         + "Priority: " + priority + "\n"
@@ -68,5 +70,15 @@ public class Task {
 
     public String getEmployeeId() {
         return employeeId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public Task setTaskId(String taskId) {
+        this.taskId = taskId;
+
+        return this;
     }
 }
