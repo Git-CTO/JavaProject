@@ -13,6 +13,7 @@ public abstract class Person {
 
     public String toString(){
         return "\n--Personal Information-- " + "\n"
+                + "Name: " + getName() + "\n"
                 + "#Gender: " + gender + "\n"
                 + "#Address: " + address + "\n"
                 + "#PhoneNumber: " + phoneNumber + "\n"

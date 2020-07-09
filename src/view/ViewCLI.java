@@ -2,23 +2,25 @@ package view;
 
 import controller.Controller;
 import model.Employee;
+import model.Task;
 import model.TeamLeader;
 import util.eRole;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class ViewCLI {
     static Scanner scanner = new Scanner(System.in);
-    static boolean toExit = true;
+    static boolean toExit = false;
 
 
     public void initView() {
         String employeeId = new Login().loginAuthenticateUser();
         eRole role = Controller.loginToSystemByEmployeeId(employeeId);
-        while (toExit) {
-            System.out.println("--Main--");
+        Controller.initData();
+
+        while (!toExit) {
+            System.out.println("\n--Main--");
             System.out.println("Choose Action:");
             switch (role) {
                 case TeamLeader:
@@ -50,9 +52,6 @@ public class ViewCLI {
                     break;
             }
         }
-
-
-        showAllEmployees();
     }
 
     private void selectActionForRoot(int actionNumber) {
@@ -73,7 +72,7 @@ public class ViewCLI {
                 changeEmployeeSalary();
                 break;
             case 6:
-                getEmployeeCard();
+                getEmployeeCardAndTasks();
                 break;
             case 7:
                 createTaskForEmployee();
@@ -81,19 +80,27 @@ public class ViewCLI {
             case 0:
                 toExit = true;
                 break;
+            default:
+                System.out.println("Error! Wrong Number Entered!");
         }
     }
 
     private void selectActionForMinorEmployee(int actionNumber, String employeeId) {
         switch (actionNumber) {
             case 1:
-                Controller.getEmployeeByID(employeeId);
+                System.out.println(Controller.getEmployeeByID(employeeId).toString());
                 break;
             case 2:
                 showTasksForEmployee(employeeId);
+                break;
+            case 3:
+                changePersonalDetails(employeeId);
+                break;
             case 0:
                 toExit = true;
                 break;
+            default:
+                System.out.println("Error! Wrong Number Entered!");
         }
     }
 
@@ -114,53 +121,71 @@ public class ViewCLI {
             case 0:
                 toExit = true;
                 break;
+            default:
+                System.out.println("Error! Wrong Number Entered!");
         }
     }
 
-    public void showTeam(String teamLeaderId){
+    public void showTeam(String teamLeaderId) {
         List<String> employeesTeamIds = ((TeamLeader) Controller.getEmployeeByID(teamLeaderId)).getEmployeesTeamIds();
         System.out.println("Your Team:");
-        if (employeesTeamIds.size()>0){
-        Controller.getEmployeeList().stream().
-                filter(employee -> employeesTeamIds.
-                        contains(employee.getEmployeeId())).
-                forEach(System.out::println);
-        }else{
+        if (employeesTeamIds.size() > 0) {
+            Controller.getEmployeeList().stream().
+                    filter(employee -> employeesTeamIds.
+                            contains(employee.getEmployeeId())).
+                    forEach(System.out::println);
+        } else {
             System.out.println("your team is Empty");
         }
     }
 
-    public void addEmployeeTeam(String teamLeaderId){
+    public void addEmployeeTeam(String teamLeaderId) {
         System.out.println("Enter Employee Id To Add Your Team: ");
         ((TeamLeader) Controller.getEmployeeByID(teamLeaderId)).addEmployeeToTeam(scanner.nextLine());
 
     }
+
     private void changePersonalDetails(String employeeId) {
-        System.out.println("1-Change First Name");
-        System.out.println("2-Change Last Name");
-        System.out.println("3-Change Address");
-        System.out.println("4-Change Phone Number");
-        System.out.println("\n0- <-- Back to main");
-        Employee employee = Controller.getEmployeeByID(employeeId);
         boolean exitBackToMain = false;
-        while(!exitBackToMain){
-            switch (scanner.nextInt()){
+        while (!exitBackToMain) {
+            System.out.println("Choose Action:");
+            System.out.println("1-Change First Name");
+            System.out.println("2-Change Last Name");
+            System.out.println("3-Change Address");
+            System.out.println("4-Change Phone Number");
+            System.out.println("\n0- <-- Back to main");
+            Employee employee = Controller.getEmployeeByID(employeeId);
+            String value;
+            switch (scanner.nextInt()) {
                 case 1:
                     System.out.print("New First Name: ");
-                    employee.setFirstName(scanner.nextLine());
+                    value = scanner.nextLine();
+                    value = scanner.nextLine();
+                    employee.setFirstName(value);
+                    break;
                 case 2:
                     System.out.print("New Last Name: ");
-                    employee.setLastName(scanner.nextLine());
+                    value = scanner.nextLine();
+                    value = scanner.nextLine();
+                    employee.setLastName(value);
+                    break;
                 case 3:
                     System.out.print("New Address: ");
-                    employee.setAddress(scanner.nextLine());
+                    value = scanner.nextLine();
+                    value = scanner.nextLine();
+                    employee.setAddress(value);
+                    break;
                 case 4:
                     System.out.print("New Phone Number: ");
-                    employee.setPhoneNumber(scanner.nextLine());
+                    value = scanner.nextLine();
+                    value = scanner.nextLine();
+                    employee.setPhoneNumber(value);
+                    break;
                 case 0:
                     exitBackToMain = true;
                     break;
             }
+            System.out.println(employee.toString());
             Controller.updateEmployeeList();
         }
 
@@ -171,6 +196,7 @@ public class ViewCLI {
         String employeeId, newSalary;
         System.out.print("enter the employee id: ");
         employeeId = scanner.nextLine();
+        employeeId = scanner.nextLine();
         System.out.print("New Salary: ");
         newSalary = scanner.nextLine();
         System.out.println(Controller.changeEmployeeSalary(employeeId, newSalary).toString());
@@ -179,17 +205,23 @@ public class ViewCLI {
 
     private void insertNewEmployeeToCompany() {
         System.out.println("Insert New Employee To Company EHRP System:");
-        Controller.newEmployee();
+        System.out.println(Controller.newEmployee().toString());
+        System.out.println("new Employee Card Created!");
     }
 
     private void deleteEmployeeFromCompany() {
         System.out.print("enter the employee id: ");
-        Controller.deleteEmployeeById(scanner.nextLine());
+        String employeeId = scanner.nextLine();
+        employeeId = scanner.nextLine();
+        Controller.deleteEmployeeById(employeeId);
     }
 
     public void showAllEmployees() {
         System.out.println("All Employees In Company: ");
-        Controller.getEmployeeList().forEach(System.out::println);
+        Controller.getEmployeeList().forEach(employee ->
+                System.out.println("\n#--#--#--#--#--#--#--#\n"
+                        + employee.toString() +
+                        "\n#--#--#--#--#--#--#--#\n"));
     }
 
     private void showAllTasks() {
@@ -197,19 +229,30 @@ public class ViewCLI {
         Controller.getAllTasks().forEach(System.out::println);
     }
 
-    private void getEmployeeCard() {
+    private void getEmployeeCardAndTasks() {
         System.out.print("Enter Employee id: ");
-        System.out.println(Controller.getEmployeeByID(scanner.nextLine()).toString());
+        String employeeId = scanner.nextLine();
+        employeeId = scanner.nextLine();
+        System.out.println(Controller.getEmployeeByID(employeeId).toString());
+        System.out.println("Employee's Tasks: ");
+        Controller.getTasksByEmployeeId(employeeId).forEach(System.out::println);
     }
 
     private void showTasksForEmployee(String employeeId) {
         System.out.println("Your Tasks: ");
-        Controller.getTasksForEmployee(employeeId).forEach(System.out::println);
+        List<Task> tasksForEmployee = Controller.getTasksForEmployee(employeeId);
+        if (tasksForEmployee.size() > 0){
+            tasksForEmployee.forEach(System.out::println);
+        }else{
+            System.out.println("You task list is empty");
+        }
     }
 
     private void createTaskForEmployee() {
         System.out.println("enter Id to create him Task:");
-        System.out.println(Controller.createTaskForEmployeeById(scanner.nextLine()).toString());
+        String employeeId = scanner.nextLine();
+        employeeId = scanner.nextLine();
+        System.out.println(Controller.createTaskForEmployeeById(employeeId).toString());
         System.out.println("New Task Created!");
     }
 }

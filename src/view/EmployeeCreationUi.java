@@ -25,7 +25,7 @@ public class EmployeeCreationUi {
         inputMap.put(eEmployeeInputFields.Address,scanner.nextLine());
         System.out.print("Salary: ");
         inputMap.put(eEmployeeInputFields.Salary,scanner.nextLine());
-        System.out.print("Role:");
+        System.out.println("Role:");
         System.out.println("0- Minor Worker \n1- Team Leader \n2- CEO");
         inputMap.put(eEmployeeInputFields.Role,scanner.nextLine());
 

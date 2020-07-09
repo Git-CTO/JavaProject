@@ -23,9 +23,12 @@ import java.util.stream.Collectors;
 public class DataService {
 
     static List<Employee> employeeList;
+    static List<Task> taskList;
+
 
     public static void init(){
         employeeList = getEmployeesFromDB();
+        taskList = getTasksFromDB();
     }
 
     public static List<Employee> getEmployeesFromDB() {
@@ -54,6 +57,10 @@ public class DataService {
         return employeeList;
     }
 
+    public static List<Task> getTaskList() {
+        return taskList;
+    }
+
     public static List<Task> getTasksFromDB() {
         Gson gson = new Gson();
         JsonReader reader = null;
@@ -74,6 +81,7 @@ public class DataService {
         } else {
             taskList = new ArrayList<>();
         }
+        DataService.taskList = taskList;
 
         return taskList;
     }
@@ -100,6 +108,7 @@ public class DataService {
 
     public static void saveEmployeesToDB(List<Employee> employeeList) {
         Gson gson = new Gson();
+        DataService.employeeList = employeeList;
 
         try (FileWriter file = new FileWriter("resources\\employees.json")) {
             file.write(gson.toJson(employeeList));
@@ -109,11 +118,11 @@ public class DataService {
         }
     }
 
-    public static void saveTasksToDB(List<Task> task) {
+    public static void saveTasksToDB(List<Task> taskList) {
         Gson gson = new Gson();
 
         try (FileWriter file = new FileWriter("resources\\tasks.json")) {
-            file.write(gson.toJson(task));
+            file.write(gson.toJson(taskList));
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -162,15 +171,28 @@ public class DataService {
                 collect(Collectors.toList());
         saveEmployeesToDB(newEmployeeList);
         deleteTasksForEmployee(employeeId);
+        deleteUserOfEmployee(employeeId);
 
         return newEmployeeList;
     }
 
+    private static void deleteUserOfEmployee(String employeeId) {
+        Map<String,String> newUsersMap = new HashMap<>();
+        Map<String,String> usersFromDB = getUsersFromDB();
+
+        List<String> filteredUserNames = usersFromDB.keySet().stream().
+                filter(username -> !username.equals(employeeId + "@hit")).collect(Collectors.toList());
+        filteredUserNames.forEach(username -> newUsersMap.put(username, usersFromDB.get(username)));
+
+        saveUsersToDB(newUsersMap);
+    }
+
     private static void deleteTasksForEmployee(String employeeId){
-        List<Task> newTasksWithoutEmployee = getTasksFromDB().stream().
+        List<Task> newTasksWithoutEmployee = getTaskList().stream().
                 filter(task -> !task.getEmployeeId().
                         equals(employeeId)).collect(Collectors.toList());
         saveTasksToDB(newTasksWithoutEmployee);
+        DataService.taskList = newTasksWithoutEmployee;
     }
 
 }

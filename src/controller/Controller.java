@@ -22,12 +22,20 @@ public class Controller {
         return employee;
     }
 
+    public static void initData(){
+        DataService.init();
+    }
+
     public static Employee getEmployeeByID(String employeeId) {
         List<Employee> employeeByIdList = getEmployeeList().stream().filter(
-                employee -> employee.getPersonalId().equals(employeeId) || employee.getEmployeeId().equals(employeeId))
+                employee -> employee.getEmployeeId().equals(employeeId))
                 .collect(Collectors.toList());
-
-        return employeeByIdList.get(0);
+        if (employeeByIdList.size()>0)
+            return employeeByIdList.get(0);
+        else {
+            System.out.println("Employee id not existing!");
+        }
+        return null;
     }
 
     public static List<Employee> getEmployeeList(){
@@ -38,15 +46,15 @@ public class Controller {
     }
 
     public static List<Task> getAllTasks(){
-        return DataService.getTasksFromDB();
+        return DataService.getTaskList();
     }
 
     public static Task createTaskForEmployeeById(String id) {
         Task task = TaskBuilder.taskBuilder(new TaskCreationUI().getInputFromUserToCreateTask());
-        List<Task> tasksFromDB = DataService.getTasksFromDB();
+        List<Task> tasksList = DataService.getTaskList();
         task.setEmployeeId(id);
-        tasksFromDB.add(task);
-        DataService.saveTasksToDB(tasksFromDB);
+        tasksList.add(task);
+        DataService.saveTasksToDB(tasksList);
         initTasksToEmployees();
         getEmployeeList().forEach(System.out::println);
 
@@ -54,7 +62,7 @@ public class Controller {
     }
 
     public static List<Task> getTasksForEmployee(String employeeId){
-        return DataService.getTasksFromDB().stream().
+        return DataService.getTaskList().stream().
                 filter(task -> task.getEmployeeId().equals(employeeId)).
                 collect(Collectors.toList());
     }
@@ -91,7 +99,7 @@ public class Controller {
 
         DataService.init();
         Employee employeeByID = getEmployeeByID(employeeId);
-        System.out.println("Welcome " + employeeByID.getName());
+        System.out.println("\n----Welcome " + employeeByID.getName() + "!----");
         System.out.println(employeeByID.toString());
 
         return employeeByID.getRole();
@@ -136,4 +144,9 @@ public class Controller {
         return employee;
     }
 
+    public static List<Task> getTasksByEmployeeId(String id){
+        return getAllTasks().stream().
+                filter(task -> task.getEmployeeId().equals(id)).
+                collect(Collectors.toList());
+    }
 }
