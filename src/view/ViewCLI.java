@@ -58,6 +58,11 @@ public class ViewCLI {
         Controller.newEmployee();
     }
 
+    private void deleteEmployeeFromCompany(){
+        System.out.print("enter the employee id: ");
+
+    }
+
     public void showAllEmployees(){
         System.out.println("All Employees In Company: ");
         Controller.getEmployeeList().forEach(System.out::println);

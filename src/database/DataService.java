@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class DataService {
@@ -152,6 +153,24 @@ public class DataService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Employee> deleteEmployeeFromDB(String employeeId){
+        List<Employee> newEmployeeList = getEmployeeList().stream().
+                filter(employee -> !employee.getEmployeeId().
+                        equals(employeeId)).
+                collect(Collectors.toList());
+        saveEmployeesToDB(newEmployeeList);
+        deleteTasksForEmployee(employeeId);
+
+        return newEmployeeList;
+    }
+
+    private static void deleteTasksForEmployee(String employeeId){
+        List<Task> newTasksWithoutEmployee = getTasksFromDB().stream().
+                filter(task -> !task.getEmployeeId().
+                        equals(employeeId)).collect(Collectors.toList());
+        saveTasksToDB(newTasksWithoutEmployee);
     }
 
 }
