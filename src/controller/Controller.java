@@ -33,6 +33,9 @@ public class Controller {
     public static List<Employee> getEmployeeList(){
         return DataService.getEmployeeList();
     }
+    public static void updateEmployeeList(){
+        DataService.saveEmployeesToDB(getEmployeeList());
+    }
 
     public static List<Task> getAllTasks(){
         return DataService.getTasksFromDB();
@@ -49,6 +52,13 @@ public class Controller {
 
         return task;
     }
+
+    public static List<Task> getTasksForEmployee(String employeeId){
+        return DataService.getTasksFromDB().stream().
+                filter(task -> task.getEmployeeId().equals(employeeId)).
+                collect(Collectors.toList());
+    }
+
 
     public static void initTasksToEmployees() {
         List<Task> tasksFromDB = DataService.getTasksFromDB();
@@ -114,4 +124,16 @@ public class Controller {
             DataService.saveTasksToDB(allTasks);
         }
     }
+
+    public static List<Employee> deleteEmployeeById(String employeeId){
+        return DataService.deleteEmployeeFromDB(employeeId);
+    }
+
+    public static Employee changeEmployeeSalary(String employeeId, String salary){
+        Employee employee = getEmployeeByID(employeeId).setSalary(salary);
+        DataService.saveEmployeesToDB(getEmployeeList());
+
+        return employee;
+    }
+
 }
