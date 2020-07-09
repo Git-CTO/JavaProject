@@ -15,7 +15,7 @@ public class TaskCreationUI {
         inputMap.put(eTaskInputFields.ProjectName, scanner.nextLine());
         System.out.print("Details: ");
         inputMap.put(eTaskInputFields.Details, scanner.nextLine());
-        System.out.print("Priority: \n0- High \n1-Medium \n3-Low ");
+        System.out.println("Priority: \n0- High \n1-Medium \n2-Low ");
         inputMap.put(eTaskInputFields.Priority, scanner.nextLine());
 
         return inputMap;

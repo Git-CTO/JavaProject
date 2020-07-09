@@ -8,6 +8,7 @@ public enum eEmployeeInputFields {
     PhoneNumber,
     PersonalId,
     Address,
-    Salary
+    Salary,
+    Role
 }
 

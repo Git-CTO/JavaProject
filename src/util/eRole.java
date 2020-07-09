@@ -1,7 +1,8 @@
 package util;
 
 public enum eRole {
-    CEO,
+    MinorWorker,
     TeamLeader,
-    junior
+    CEO,
+    Root
 }

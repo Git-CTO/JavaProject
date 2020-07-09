@@ -12,12 +12,14 @@ public class Employee extends Person {
     String salary;
     List<Task> taskList;
     eRole role;
+    int numOfTask;
 
 
     public Employee() {
         startDate = new Date();
-        role = eRole.junior;
+        role = eRole.MinorWorker;
         taskList = new ArrayList<>();
+        numOfTask = 0;
     }
 
     public String toString() {
@@ -26,16 +28,12 @@ public class Employee extends Person {
                 + "#Employee Id: " + employeeId + "\n"
                 + "#Your Start Date in Company: " + startDate + '\n'
                 + "#Your Salary: " + salary + '\n'
-                + "#Num Of Tasks: " + 0 + '\n';
+                + "#Num Of Tasks: " + numOfTask + '\n'
+                + "#Role: " + role + '\n';
     }
 
     public Employee setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
-        return this;
-    }
-
-    public Employee setStartDate(Date startDate) {
-        this.startDate = startDate;
         return this;
     }
 
@@ -53,8 +51,23 @@ public class Employee extends Person {
         return this;
     }
 
-    public void addTask(Task task) {
+    public Employee addTask(Task task) {
         taskList.add(task);
+
+        return this;
     }
 
+    public Employee setNumOfTask(int numOfTask) {
+        this.numOfTask = numOfTask;
+
+        return this;
+    }
+
+    public int getNumOfTask() {
+        return numOfTask;
+    }
+
+    public eRole getRole() {
+        return role;
+    }
 }

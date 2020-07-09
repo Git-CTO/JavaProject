@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import java.util.Scanner;
 
 public class Login {
@@ -7,20 +9,23 @@ public class Login {
     String userName;
     String password;
 
-    public void loginAuthenticateUser() {
+    public String loginAuthenticateUser() {
         do {
             System.out.println("please enter username and password:");
             System.out.println("username: ");
             userName = scanner.nextLine();
             System.out.println("password: ");
             password = scanner.nextLine();
-        } while (!authenticateUser());
+        } while (!authenticateUser(userName, password));
 
-        //todo: authentication with the data in json
-
+        if(userName.equals("root")) {
+            return "root";
+        }else {
+            return userName.split("@")[0];
+        }
     }
 
-    private boolean authenticateUser() {
-        return true;
+    private boolean authenticateUser(String userName, String password) {
+        return Controller.authenticateUser(userName, password);
     }
 }

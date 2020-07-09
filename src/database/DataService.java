@@ -1,7 +1,6 @@
 package database;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -15,19 +14,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DataService {
 
     static List<Employee> employeeList;
 
+    public static void init(){
+        employeeList = getEmployeesFromDB();
+    }
+
     public static List<Employee> getEmployeesFromDB() {
         Gson gson = new Gson();
         JsonReader reader = null;
-        Type EMPLOYEE_LIST_TYPE = new TypeToken<List<Employee>>() {
-        }.getType();
-
 
         try {
             reader = new JsonReader(new FileReader("resources\\employees.json"));
@@ -50,7 +52,6 @@ public class DataService {
     public static List<Employee> getEmployeeList() {
         return employeeList;
     }
-
 
     public static List<Task> getTasksFromDB() {
         Gson gson = new Gson();
@@ -86,10 +87,17 @@ public class DataService {
             employee.setEmployeeId("1");
         }
         employeeList.add(employee);
-        updateDB(employeeList);
+        saveEmployeesToDB(employeeList);
+        createNewUserForEmployeeToLogin(employee);
     }
 
-    public static void updateDB(List<Employee> employeeList) {
+    private static void createNewUserForEmployeeToLogin(Employee employee) {
+        Map<String, String> usersFromDB = getUsersFromDB();
+        usersFromDB.put(employee.getEmployeeId()+"@hit",employee.getPersonalId());
+        saveUsersToDB(usersFromDB);
+    }
+
+    public static void saveEmployeesToDB(List<Employee> employeeList) {
         Gson gson = new Gson();
 
         try (FileWriter file = new FileWriter("resources\\employees.json")) {
@@ -100,7 +108,7 @@ public class DataService {
         }
     }
 
-    public static void saveTaskToDB(List<Task> task) {
+    public static void saveTasksToDB(List<Task> task) {
         Gson gson = new Gson();
 
         try (FileWriter file = new FileWriter("resources\\tasks.json")) {
@@ -110,4 +118,40 @@ public class DataService {
             e.printStackTrace();
         }
     }
+
+    public static Map<String, String> getUsersFromDB() {
+        Gson gson = new Gson();
+        JsonReader reader = null;
+        Map<String, String> usersMap;
+
+        try {
+            reader = new JsonReader(new FileReader("resources\\users.json"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonElement jsonElements = JsonParser.parseReader(reader);
+        if (!jsonElements.isJsonNull()) {
+            Type TaskListType = new TypeToken<Map<String, String>>() {
+            }.getType();
+            usersMap = gson.fromJson(jsonElements, TaskListType);
+        } else {
+            usersMap = new HashMap<>();
+        }
+
+        return usersMap;
+    }
+
+    public static void saveUsersToDB(Map<String, String> usersMap) {
+        Gson gson = new Gson();
+
+        try (FileWriter file = new FileWriter("resources\\users.json")) {
+            file.write(gson.toJson(usersMap));
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
