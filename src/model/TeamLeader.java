@@ -1,10 +1,33 @@
 package model;
 
-public class TeamLeader extends Employee {
-    Employee[] employeesTeam;
+import builder.TaskBuilder;
+import controller.Controller;
+import util.eRole;
 
-    public Employee setEmployeesTeam(Employee[] employeesTeam) {
-        this.employeesTeam = employeesTeam;
-        return this;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TeamLeader extends Employee implements ITask{
+    List<String> employeesTeamIds;
+
+    public TeamLeader(){
+        role = eRole.TeamLeader;
+    }
+
+    public void setEmployeesTeam(List<String> employeesTeamIds) {
+        this.employeesTeamIds = employeesTeamIds;
+    }
+
+    public void addEmployeeToTeam(String employeeId){
+        employeesTeamIds.add(employeeId);
+    }
+
+    public List<String> getEmployeesTeamIds() {
+        return employeesTeamIds;
+    }
+
+    @Override
+    public Task createTask(String id) {
+        return Controller.createTaskForEmployeeById(id);
     }
 }

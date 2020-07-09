@@ -1,30 +1,30 @@
 package view;
 
-import util.eInputFields;
+import util.fields.eEmployeeInputFields;
 
 import java.util.*;
 
 public class EmployeeCreationUi {
-    Map<eInputFields, String> inputMap = new HashMap<>();
+    Map<eEmployeeInputFields, String> inputMap = new HashMap<>();
     Scanner scanner = new Scanner(System.in);
 
-    public Map<eInputFields, String> getInputFromUserToCreateEmployee(){
+    public Map<eEmployeeInputFields, String> getInputFromUserToCreateEmployee(){
         System.out.print("First Name: ");
-        inputMap.put(eInputFields.FirstName ,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.FirstName ,scanner.nextLine());
         System.out.print("Last Name: ");
-        inputMap.put(eInputFields.LastName,scanner.nextLine());
-        System.out.println("Gender:\n 0- Male\n1- Female");
-        inputMap.put(eInputFields.Gender,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.LastName,scanner.nextLine());
+        System.out.println("Gender:\n0- Male \n1- Female");
+        inputMap.put(eEmployeeInputFields.Gender,scanner.nextLine());
         System.out.print("Personal Id: ");
-        inputMap.put(eInputFields.PersonalId,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.PersonalId,scanner.nextLine());
         System.out.print("Age: ");
-        inputMap.put(eInputFields.Age,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.Age,scanner.nextLine());
         System.out.print("Phone number: ");
-        inputMap.put(eInputFields.PhoneNumber,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.PhoneNumber,scanner.nextLine());
         System.out.print("Address: ");
-        inputMap.put(eInputFields.Address,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.Address,scanner.nextLine());
         System.out.print("Salary: ");
-        inputMap.put(eInputFields.Salary,scanner.nextLine());
+        inputMap.put(eEmployeeInputFields.Salary,scanner.nextLine());
 
         return inputMap;
     }

@@ -1,18 +1,23 @@
 package model;
 
+import util.eRole;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Employee extends Person {
     String employeeId;
     Date startDate;
     String salary;
-    int numOfTasks;
-    static int employeeCount;
+    List<Task> taskList;
+    eRole role;
+
 
     public Employee() {
         startDate = new Date();
-        employeeId = "" + ++employeeCount;
-        numOfTasks = 0;
+        role = eRole.junior;
+        taskList = new ArrayList<>();
     }
 
     public String toString() {
@@ -21,7 +26,7 @@ public class Employee extends Person {
                 + "#Employee Id: " + employeeId + "\n"
                 + "#Your Start Date in Company: " + startDate + '\n'
                 + "#Your Salary: " + salary + '\n'
-                + "#Num Of Tasks: " + numOfTasks + '\n';
+                + "#Num Of Tasks: " + 0 + '\n';
     }
 
     public Employee setEmployeeId(String employeeId) {
@@ -39,12 +44,17 @@ public class Employee extends Person {
         return this;
     }
 
-    public Employee setNumOfTasks(int numOfTasks) {
-        this.numOfTasks = numOfTasks;
-        return this;
-    }
-
     public String getEmployeeId() {
         return employeeId;
     }
+
+    public Employee setRole(eRole role) {
+        this.role = role;
+        return this;
+    }
+
+    public void addTask(Task task) {
+        taskList.add(task);
+    }
+
 }

@@ -1,6 +1,6 @@
-package util;
+package util.fields;
 
-public enum eInputFields {
+public enum eEmployeeInputFields {
     FirstName,
     LastName,
     Gender,
@@ -10,3 +10,4 @@ public enum eInputFields {
     Address,
     Salary
 }
+

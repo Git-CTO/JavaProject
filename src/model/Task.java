@@ -6,19 +6,22 @@ import util.eStatus;
 import java.util.Date;
 
 public class Task {
-    private int taskNum;
     private Date startDate;
     private Date endDate;
-    private Date ActualDate = null;
     private eStatus status;
     private ePriority priority;
     private String details;
     private String projectName;
-    
-    public String toString(){
+    private String employeeId;
+
+    public Task() {
+        startDate = new Date();
+    }
+
+    public String toString() {
         return
-                "Task Num: " + taskNum + "\n"
-                + "Start Date: " + startDate + "\n"
+                "Employee Id: " + employeeId + "\n"
+                        + "Start Date: " + startDate + "\n"
                         + "End Date: " + endDate + "\n"
                         + "Priority: " + priority + "\n"
                         + "Details: " + details + "\n"
@@ -26,67 +29,44 @@ public class Task {
                         + "Status: " + status + "\n";
     }
 
-    public int getTaskNum() {
-        return taskNum;
-    }
 
-    public void setTaskNum(int taskNum) {
-        this.taskNum = taskNum;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
+    public Task setStartDate(Date startDate) {
         this.startDate = startDate;
+        return this;
     }
 
-    public Date getEndDate() {
-        return endDate;
-    }
 
-    public void setEndDate(Date endDate) {
+    public Task setEndDate(Date endDate) {
         this.endDate = endDate;
+        return this;
     }
 
-    public Date getActualDate() {
-        return ActualDate;
-    }
-
-    public void setActualDate(Date actualDate) {
-        ActualDate = actualDate;
-    }
-
-    public eStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(eStatus status) {
+    public Task setStatus(eStatus status) {
         this.status = status;
+        return this;
     }
 
-    public ePriority getPriority() {
-        return priority;
-    }
 
-    public void setPriority(ePriority priority) {
+    public Task setPriority(ePriority priority) {
         this.priority = priority;
+        return this;
     }
 
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
+    public Task setDetails(String details) {
         this.details = details;
+        return this;
     }
 
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
+    public Task setProjectName(String projectName) {
         this.projectName = projectName;
+        return this;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
     }
 }

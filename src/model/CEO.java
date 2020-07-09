@@ -1,13 +1,29 @@
 package model;
 
-public class CEO extends Employee{
-    TeamLeader[] teamLeaders;
+import util.eRole;
 
-    public TeamLeader[] getTeamLeaders() {
-        return teamLeaders;
+import java.util.List;
+
+public class CEO extends Employee implements ITask{
+    List<String> teamLeadersIds;
+
+    public CEO(){
+        role = eRole.CEO;
     }
 
-    public void setTeamLeaders(TeamLeader[] teamLeaders) {
-        this.teamLeaders = teamLeaders;
+    public void setTeamLeadersIds(List<String> teamLeadersIds) {
+        this.teamLeadersIds = teamLeadersIds;
+    }
+
+    public void addTeamLeaderId(String teamLeaderId){
+        teamLeadersIds.add(teamLeaderId);
+    }
+    public List<String> getTeamLeadersIds() {
+        return teamLeadersIds;
+    }
+
+    @Override
+    public Task createTask(String id) {
+        return null;
     }
 }
