@@ -12,6 +12,7 @@ public class TeamLeader extends Employee implements ITask{
 
     public TeamLeader(){
         role = eRole.TeamLeader;
+        employeesTeamIds = new ArrayList<>();
     }
 
     public void setEmployeesTeam(List<String> employeesTeamIds) {

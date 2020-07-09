@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import model.Employee;
 import model.Task;
+import model.TeamLeader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,11 +25,13 @@ public class DataService {
 
     static List<Employee> employeeList;
     static List<Task> taskList;
+    static List<TeamLeader> teamLeaderList;
 
 
     public static void init(){
         employeeList = getEmployeesFromDB();
         taskList = getTasksFromDB();
+        teamLeaderList = getTeamLeadersFromDB();
     }
 
     public static List<Employee> getEmployeesFromDB() {
@@ -55,6 +58,34 @@ public class DataService {
 
     public static List<Employee> getEmployeeList() {
         return employeeList;
+    }
+
+    public static List<TeamLeader> getTeamLeadersFromDB() {
+        Gson gson = new Gson();
+        JsonReader reader = null;
+        List<TeamLeader> teamLeaders;
+
+        try {
+            reader = new JsonReader(new FileReader("resources\\teamLeaders.json"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        JsonElement jsonElements = JsonParser.parseReader(reader);
+        if (!jsonElements.isJsonNull()) {
+            Type TaskListType = new TypeToken<List<TeamLeader>>() {
+            }.getType();
+            teamLeaders = gson.fromJson(jsonElements, TaskListType);
+        } else {
+            teamLeaders = new ArrayList<>();
+        }
+        DataService.teamLeaderList = teamLeaders;
+
+        return teamLeaders;
+    }
+
+    public static List<TeamLeader> getTeamLeasersList() {
+        return teamLeaderList;
     }
 
     public static List<Task> getTaskList() {
@@ -112,6 +143,17 @@ public class DataService {
 
         try (FileWriter file = new FileWriter("resources\\employees.json")) {
             file.write(gson.toJson(employeeList));
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveTeamLeadersToDB(List<TeamLeader> teamLeaders) {
+        Gson gson = new Gson();
+
+        try (FileWriter file = new FileWriter("resources\\tasks.json")) {
+            file.write(gson.toJson(teamLeaders));
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
