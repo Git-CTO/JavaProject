@@ -4,7 +4,7 @@ import controller.Controller;
 
 import java.util.Scanner;
 
-public class Login {
+public class LoginView {
     Scanner scanner = new Scanner(System.in);
     String userName;
     String password;

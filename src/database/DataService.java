@@ -213,8 +213,23 @@ public class DataService {
         saveEmployeesToDB(newEmployeeList);
         deleteTasksForEmployee(employeeId);
         deleteUserOfEmployee(employeeId);
+        deleteEmployeeFromTeam(employeeId);
 
         return newEmployeeList;
+    }
+
+    private static void deleteEmployeeFromTeam(String employeeId) {
+        Map<String,List<String>> newTeamsMap = new HashMap<>();
+        Map<String, List<String>> teamsList = getTeamsList();
+
+        for (String teamLeaderId : teamsList.keySet()) {
+            List<String> filteredIdsList = teamsList.get(teamLeaderId).stream()
+                    .filter(id -> !id.equals(employeeId))
+                    .collect(Collectors.toList());
+            newTeamsMap.put(teamLeaderId, filteredIdsList);
+        }
+
+        saveTeamsToDB(newTeamsMap);
     }
 
     private static void deleteUserOfEmployee(String employeeId) {

@@ -6,15 +6,28 @@ import model.Task;
 import util.eRole;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewCLI {
     static Scanner scanner = new Scanner(System.in);
     static boolean toExit = false;
+    private static ViewCLI viewCLIInstance = null;
 
+    private ViewCLI() {
 
-    public void initView() {
-        String employeeId = new Login().loginAuthenticateUser();
+    }
+
+    public static ViewCLI createViewCli() {
+        if (viewCLIInstance == null) {
+            viewCLIInstance = new ViewCLI();
+        }
+        return viewCLIInstance;
+    }
+
+    void initView() {
+        String employeeId = new LoginView().loginAuthenticateUser();
         eRole role = Controller.loginToSystemByEmployeeId(employeeId);
         Controller.initData();
 
@@ -47,6 +60,7 @@ public class ViewCLI {
                     System.out.println("5- Change Salary To Employee");
                     System.out.println("6- Get Employee Card And His Tasks");
                     System.out.println("7- Create Task For Employee");
+                    System.out.println("8- Show All Teams In Company");
                     System.out.println("\n0- <-- Exit");
                     selectActionForRoot(scanner.nextInt());
                     break;
@@ -76,6 +90,9 @@ public class ViewCLI {
                 break;
             case 7:
                 createTaskForEmployee();
+                break;
+            case 8:
+                showAllTeamsInCompany();
                 break;
             case 0:
                 toExit = true;
@@ -129,26 +146,31 @@ public class ViewCLI {
         }
     }
 
-    public void showTeam(String teamLeaderId) {
+    private void showTeam(String teamLeaderId) {
         List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
 
         if (teamByTeamLeaderId == null) {
             System.out.println("your team is Empty");
         } else {
             System.out.println("Team Size: " + teamByTeamLeaderId.size());
-            System.out.println("Your Employee's Name and Id In Team");
-            teamByTeamLeaderId.forEach(employeeId ->
-            {
-                Employee employee = Controller.getEmployeeByID(employeeId);
-                System.out.println("\n#--#--#--#--#--#--#--#");
-                System.out.println("Name: " + employee.getName()
-                        + " Id: " + employee.getEmployeeId());
-                System.out.println("#--#--#--#--#--#--#--#");
-            });
+            if (teamByTeamLeaderId.size() > 0) {
+                System.out.println("Your Employee's Name and Id In Team");
+                teamByTeamLeaderId.forEach(employeeId ->
+                {
+                    Employee employee = Controller.getEmployeeByID(employeeId);
+                    System.out.println("\n#--#--#--#--#--#--#--#");
+                    System.out.println("Name: " + employee.getName()
+                            + ", Id: " + employee.getEmployeeId());
+                    System.out.println("#--#--#--#--#--#--#--#");
+                });
+            }
+            else{
+                System.out.println("your team is Empty");
+            }
         }
     }
 
-    public void addEmployeeToTeam(String teamLeaderId) {
+    private void addEmployeeToTeam(String teamLeaderId) {
         System.out.println("Enter Employee Id To Add Your Team: ");
         scanner.nextLine();
         String employeeId = scanner.nextLine();
@@ -227,7 +249,7 @@ public class ViewCLI {
         Controller.deleteEmployeeById(employeeId);
     }
 
-    public void showAllEmployees() {
+    private void showAllEmployees() {
         System.out.println("All Employees In Company: ");
         Controller.getEmployeeList().forEach(employee ->
                 System.out.println("\n#--#--#--#--#--#--#--#\n"
@@ -248,9 +270,9 @@ public class ViewCLI {
         } else {
             teamByTeamLeaderId.forEach(employeeId -> {
                 List<Task> tasksByEmployeeId = Controller.getTasksByEmployeeId(employeeId);
-                if(tasksByEmployeeId == null){
+                if (tasksByEmployeeId == null) {
                     System.out.println("No Tasks for employee id: " + employeeId);
-                }else {
+                } else {
                     tasksByEmployeeId.forEach(System.out::println);
                 }
             });
@@ -299,6 +321,31 @@ public class ViewCLI {
             System.out.println("There are your employees team ids:");
             teamByTeamLeaderId.forEach(employeeId -> System.out.println("Id : " + employeeId));
             createTaskForEmployee();
+        }
+    }
+
+    private void showAllTeamsInCompany(){
+        Map<String, List<String>> allTeams = Controller.getAllTeams();
+        AtomicInteger indexSize = new AtomicInteger();
+        for(String teamLeaderId : allTeams.keySet()){
+            System.out.println("teamLeaderId: " + teamLeaderId);
+            List<String> employeesIdList = allTeams.get(teamLeaderId);
+            System.out.print("employee id in this team: [ ");
+            indexSize.set(employeesIdList.size());
+
+            employeesIdList.forEach(id -> {
+                if (indexSize.get() - 1 > 0) {
+                    System.out.println(id + ", ");
+                } else if (indexSize.get() - 1 == 0) {
+                    System.out.println(id);
+                }
+                else{
+                    System.out.println("empty team");
+                }
+                indexSize.getAndDecrement();
+            });
+
+            System.out.println(" ]");
         }
     }
 }
