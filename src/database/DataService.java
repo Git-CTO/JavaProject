@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import model.Employee;
 import model.Task;
-import model.TeamLeader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -25,16 +24,16 @@ public class DataService {
 
     static List<Employee> employeeList;
     static List<Task> taskList;
-    static List<TeamLeader> teamLeaderList;
+    static Map<String,List<String>> teams;
 
 
     public static void init(){
         employeeList = getEmployeesFromDB();
         taskList = getTasksFromDB();
-        teamLeaderList = getTeamLeadersFromDB();
+        teams = getTeamsFromDB();
     }
 
-    public static List<Employee> getEmployeesFromDB() {
+    private static List<Employee> getEmployeesFromDB() {
         Gson gson = new Gson();
         JsonReader reader = null;
 
@@ -60,39 +59,39 @@ public class DataService {
         return employeeList;
     }
 
-    public static List<TeamLeader> getTeamLeadersFromDB() {
+    private static Map<String,List<String>> getTeamsFromDB() {
         Gson gson = new Gson();
         JsonReader reader = null;
-        List<TeamLeader> teamLeaders;
+        Map<String,List<String>> teamLeaders;
 
         try {
-            reader = new JsonReader(new FileReader("resources\\teamLeaders.json"));
+            reader = new JsonReader(new FileReader("resources\\teams.json"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         JsonElement jsonElements = JsonParser.parseReader(reader);
         if (!jsonElements.isJsonNull()) {
-            Type TaskListType = new TypeToken<List<TeamLeader>>() {
+            Type TaskListType = new TypeToken<Map<String,List<String>>>() {
             }.getType();
             teamLeaders = gson.fromJson(jsonElements, TaskListType);
         } else {
-            teamLeaders = new ArrayList<>();
+            teamLeaders = new HashMap<>();
         }
-        DataService.teamLeaderList = teamLeaders;
+        DataService.teams = teamLeaders;
 
         return teamLeaders;
     }
 
-    public static List<TeamLeader> getTeamLeasersList() {
-        return teamLeaderList;
+    public static Map<String,List<String>> getTeamsList() {
+        return teams;
     }
 
-    public static List<Task> getTaskList() {
+    public static List<Task> getAllTasksList() {
         return taskList;
     }
 
-    public static List<Task> getTasksFromDB() {
+    private static List<Task> getTasksFromDB() {
         Gson gson = new Gson();
         JsonReader reader = null;
         List<Task> taskList;
@@ -149,10 +148,10 @@ public class DataService {
         }
     }
 
-    public static void saveTeamLeadersToDB(List<TeamLeader> teamLeaders) {
+    public static void saveTeamsToDB(Map<String,List<String>> teamLeaders) {
         Gson gson = new Gson();
 
-        try (FileWriter file = new FileWriter("resources\\tasks.json")) {
+        try (FileWriter file = new FileWriter("resources\\teams.json")) {
             file.write(gson.toJson(teamLeaders));
             file.flush();
         } catch (IOException e) {
@@ -230,7 +229,7 @@ public class DataService {
     }
 
     private static void deleteTasksForEmployee(String employeeId){
-        List<Task> newTasksWithoutEmployee = getTaskList().stream().
+        List<Task> newTasksWithoutEmployee = getAllTasksList().stream().
                 filter(task -> !task.getEmployeeId().
                         equals(employeeId)).collect(Collectors.toList());
         saveTasksToDB(newTasksWithoutEmployee);

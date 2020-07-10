@@ -3,7 +3,6 @@ package view;
 import controller.Controller;
 import model.Employee;
 import model.Task;
-import model.TeamLeader;
 import util.eRole;
 
 import java.util.List;
@@ -28,6 +27,7 @@ public class ViewCLI {
                     System.out.println("2- Create Task For Employee");
                     System.out.println("3- Change Personal Details");
                     System.out.println("4- Add Employee To Team");
+                    System.out.println("5- Show Team's tasks");
                     System.out.println("\n0- <-- Exit");
                     selectActionForTeamLeader(scanner.nextInt(), employeeId);
                     break;
@@ -43,7 +43,7 @@ public class ViewCLI {
                     System.out.println("1- Add Employee To Company");
                     System.out.println("2- Show All Employees Cards");
                     System.out.println("3- Show All Tasks In Company");
-                    System.out.println("4- delete Employee From Company");
+                    System.out.println("4- Delete Employee From Company");
                     System.out.println("5- Change Salary To Employee");
                     System.out.println("6- Get Employee Card And His Tasks");
                     System.out.println("7- Create Task For Employee");
@@ -104,19 +104,22 @@ public class ViewCLI {
         }
     }
 
-    private void selectActionForTeamLeader(int actionNumber, String employeeId) {
+    private void selectActionForTeamLeader(int actionNumber, String teamLeaderId) {
         switch (actionNumber) {
             case 1:
-                showTeam(employeeId);
+                showTeam(teamLeaderId);
                 break;
             case 2:
-                createTaskForEmployee();
+                createTaskForEmployeeInTeam(teamLeaderId);
                 break;
             case 3:
-                changePersonalDetails(employeeId);
+                changePersonalDetails(teamLeaderId);
                 break;
             case 4:
-                addEmployeeTeam(employeeId);
+                addEmployeeToTeam(teamLeaderId);
+                break;
+            case 5:
+                showTeamTasks(teamLeaderId);
                 break;
             case 0:
                 toExit = true;
@@ -127,22 +130,30 @@ public class ViewCLI {
     }
 
     public void showTeam(String teamLeaderId) {
-        List<String> employeesTeamIds = ((TeamLeader) Controller.getEmployeeByID(teamLeaderId)).getEmployeesTeamIds();
-        System.out.println("Your Team:");
-        if (employeesTeamIds.size() > 0) {
-            Controller.getEmployeeList().stream().
-                    filter(employee -> employeesTeamIds.
-                            contains(employee.getEmployeeId())).
-                    forEach(System.out::println);
-        } else {
+        List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
+
+        if (teamByTeamLeaderId == null) {
             System.out.println("your team is Empty");
+        } else {
+            System.out.println("Team Size: " + teamByTeamLeaderId.size());
+            System.out.println("Your Employee's Name and Id In Team");
+            teamByTeamLeaderId.forEach(employeeId ->
+            {
+                Employee employee = Controller.getEmployeeByID(employeeId);
+                System.out.println("\n#--#--#--#--#--#--#--#");
+                System.out.println("Name: " + employee.getName()
+                        + " Id: " + employee.getEmployeeId());
+                System.out.println("#--#--#--#--#--#--#--#");
+            });
         }
     }
 
-    public void addEmployeeTeam(String teamLeaderId) {
+    public void addEmployeeToTeam(String teamLeaderId) {
         System.out.println("Enter Employee Id To Add Your Team: ");
-        ((TeamLeader) Controller.getEmployeeByID(teamLeaderId)).addEmployeeToTeam(scanner.nextLine());
-
+        scanner.nextLine();
+        String employeeId = scanner.nextLine();
+        Controller.addEmployeeToTeam(teamLeaderId, employeeId);
+        System.out.println("Employee Added your Team!\n");
     }
 
     private void changePersonalDetails(String employeeId) {
@@ -229,30 +240,65 @@ public class ViewCLI {
         Controller.getAllTasks().forEach(System.out::println);
     }
 
+    private void showTeamTasks(String teamLeaderId) {
+        List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
+
+        if (teamLeaderId == null) {
+            System.out.println("no Tasks To show! you Team Is empty, you haven't employees");
+        } else {
+            teamByTeamLeaderId.forEach(employeeId -> {
+                List<Task> tasksByEmployeeId = Controller.getTasksByEmployeeId(employeeId);
+                if(tasksByEmployeeId == null){
+                    System.out.println("No Tasks for employee id: " + employeeId);
+                }else {
+                    tasksByEmployeeId.forEach(System.out::println);
+                }
+            });
+        }
+
+    }
+
     private void getEmployeeCardAndTasks() {
         System.out.print("Enter Employee id: ");
         String employeeId = scanner.nextLine();
         employeeId = scanner.nextLine();
         System.out.println(Controller.getEmployeeByID(employeeId).toString());
         System.out.println("Employee's Tasks: ");
-        Controller.getTasksByEmployeeId(employeeId).forEach(System.out::println);
+        List<Task> tasksByEmployeeId = Controller.getTasksByEmployeeId(employeeId);
+        if (tasksByEmployeeId == null) {
+            System.out.println("No tasks for employee id: " + employeeId);
+        } else {
+            tasksByEmployeeId.forEach(System.out::println);
+        }
     }
 
     private void showTasksForEmployee(String employeeId) {
         System.out.println("Your Tasks: ");
         List<Task> tasksForEmployee = Controller.getTasksForEmployee(employeeId);
-        if (tasksForEmployee.size() > 0){
+        if (tasksForEmployee.size() > 0) {
             tasksForEmployee.forEach(System.out::println);
-        }else{
+        } else {
             System.out.println("You task list is empty");
         }
     }
 
     private void createTaskForEmployee() {
-        System.out.println("enter Id to create him Task:");
+        System.out.println("Enter employee id to create him Task:");
         String employeeId = scanner.nextLine();
         employeeId = scanner.nextLine();
         System.out.println(Controller.createTaskForEmployeeById(employeeId).toString());
         System.out.println("New Task Created!");
+    }
+
+    private void createTaskForEmployeeInTeam(String teamLeaderId) {
+        List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
+
+        if (teamByTeamLeaderId == null) {
+            System.out.println("Your team is empty, you can't create task for employee!");
+        } else {
+            System.out.println("There are your employees team ids:");
+            teamByTeamLeaderId.forEach(employeeId -> System.out.println("Id : " + employeeId));
+            createTaskForEmployee();
+        }
     }
 }

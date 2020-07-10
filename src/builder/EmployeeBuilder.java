@@ -17,14 +17,15 @@ public class EmployeeBuilder {
     public static Employee builder(Map<eEmployeeInputFields, String> inputMap) {
         eRole role = eRole.values()[Integer.parseInt(inputMap.get(eEmployeeInputFields.Role))];
         Employee employee = createEmployee(role);
-//        switch (role){
-//            case CEO:
-//                    ((CEO) employee).setTeamLeadersIds(Controller.getAllTeamLeadersIds());
-//                    break;
-//            case TeamLeader:
-//                ((TeamLeader) employee).setEmployeesTeam(new ArrayList<>());
-//                    break;
-//        }
+        switch (role){
+            case CEO:
+                    ((CEO) employee).setTeamLeadersIds(Controller.getAllTeamLeadersIds());
+
+                    break;
+            case TeamLeader:
+                ((TeamLeader) employee).setEmployeesTeam(new ArrayList<>());
+                    break;
+        }
         return buildEmployee(inputMap, employee);
     }
 

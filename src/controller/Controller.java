@@ -10,6 +10,7 @@ import util.eStatus;
 import view.EmployeeCreationUi;
 import view.TaskCreationUI;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,12 +47,12 @@ public class Controller {
     }
 
     public static List<Task> getAllTasks(){
-        return DataService.getTaskList();
+        return DataService.getAllTasksList();
     }
 
     public static Task createTaskForEmployeeById(String id) {
         Task task = TaskBuilder.taskBuilder(new TaskCreationUI().getInputFromUserToCreateTask());
-        List<Task> tasksList = DataService.getTaskList();
+        List<Task> tasksList = DataService.getAllTasksList();
         task.setEmployeeId(id);
         tasksList.add(task);
         DataService.saveTasksToDB(tasksList);
@@ -62,17 +63,17 @@ public class Controller {
     }
 
     public static List<Task> getTasksForEmployee(String employeeId){
-        return DataService.getTaskList().stream().
+        return DataService.getAllTasksList().stream().
                 filter(task -> task.getEmployeeId().equals(employeeId)).
                 collect(Collectors.toList());
     }
 
 
     public static void initTasksToEmployees() {
-        List<Task> tasksFromDB = DataService.getTasksFromDB();
+        List<Task> taskList = DataService.getAllTasksList();
         getEmployeeList().forEach(employee -> employee.setNumOfTask(0));
 
-        tasksFromDB.forEach(task -> {
+        taskList.forEach(task -> {
             Employee employee = getEmployeeByID(task.getEmployeeId()).addTask(task);
             employee.setNumOfTask(employee.getNumOfTask() + 1);
 
@@ -145,8 +146,42 @@ public class Controller {
     }
 
     public static List<Task> getTasksByEmployeeId(String id){
-        return getAllTasks().stream().
+        List<Task> taskList = getAllTasks().stream().
                 filter(task -> task.getEmployeeId().equals(id)).
                 collect(Collectors.toList());
+
+        if(taskList.size() > 0){
+            return taskList;
+        }
+
+        return null;
+    }
+
+    public static Map<String,List<String>> getAllTeams(){
+        return DataService.getTeamsList();
+    }
+    public static List<String> getTeamByTeamLeaderId(String teamLeaderId){
+        Map<String, List<String>> teamsList = DataService.getTeamsList();
+        boolean isHaveTeam = teamsList.containsKey(teamLeaderId);
+
+        if(isHaveTeam){
+            return teamsList.get(teamLeaderId);
+        }
+
+        return null;
+    }
+
+    public static void addEmployeeToTeam(String teamLeaderId, String employeeId) {
+        Map<String, List<String>> allTeams = Controller.getAllTeams();
+
+        if (allTeams.containsKey(teamLeaderId)) {
+            allTeams.get(teamLeaderId).add(employeeId);
+        } else {
+            List<String> newTeamList = new ArrayList<>();
+            newTeamList.add(employeeId);
+            allTeams.put(teamLeaderId, newTeamList);
+        }
+
+        DataService.saveTeamsToDB(allTeams);
     }
 }
