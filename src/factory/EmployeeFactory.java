@@ -5,7 +5,7 @@ import model.Employee;
 import model.TeamLeader;
 import util.eRole;
 
-public class EmployeeFactory {
+public abstract class EmployeeFactory {
     public static Employee createEmployee(eRole role){
         switch (role){
             case CEO:
