@@ -4,6 +4,7 @@ import controller.Controller;
 import model.Employee;
 import model.Task;
 import util.eRole;
+import util.eStatus;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewCLI {
     static Scanner scanner = new Scanner(System.in);
-    static boolean toExit = false;
+    static boolean toExit;
     private static ViewCLI viewCLIInstance = null;
+    private static boolean toLogout;
+
 
     private ViewCLI() {
 
@@ -27,45 +30,57 @@ public class ViewCLI {
     }
 
     void initView() {
-        String employeeId = new LoginView().loginAuthenticateUser();
-        eRole role = Controller.loginToSystemByEmployeeId(employeeId);
-        Controller.initData();
+        do {
+            String employeeId = new LoginView().loginAuthenticateUser();
+            eRole role = Controller.loginToSystemByEmployeeId(employeeId);
+            Controller.initData();
+            toLogout = false;
+            toExit = false;
 
-        while (!toExit) {
-            System.out.println("\n--Main--");
-            System.out.println("Choose Action:");
-            switch (role) {
-                case TeamLeader:
-                    System.out.println("1- Show Team");
-                    System.out.println("2- Create Task For Employee");
-                    System.out.println("3- Change Personal Details");
-                    System.out.println("4- Add Employee To Team");
-                    System.out.println("5- Show Team's tasks");
-                    System.out.println("\n0- <-- Exit");
-                    selectActionForTeamLeader(scanner.nextInt(), employeeId);
-                    break;
-                case MinorWorker:
-                    System.out.println("1- Show Employee Card");
-                    System.out.println("2- Show Tasks");
-                    System.out.println("3- Change Personal Details");
-                    System.out.println("\n0- <-- Exit");
-                    selectActionForMinorEmployee(scanner.nextInt(), employeeId);
-                    break;
-                case CEO:
-                case Root:
-                    System.out.println("1- Add Employee To Company");
-                    System.out.println("2- Show All Employees Cards");
-                    System.out.println("3- Show All Tasks In Company");
-                    System.out.println("4- Delete Employee From Company");
-                    System.out.println("5- Change Salary To Employee");
-                    System.out.println("6- Get Employee Card And His Tasks");
-                    System.out.println("7- Create Task For Employee");
-                    System.out.println("8- Show All Teams In Company");
-                    System.out.println("\n0- <-- Exit");
-                    selectActionForRoot(scanner.nextInt());
-                    break;
+            while (!toExit) {
+                System.out.println("\n--Main--");
+                System.out.println("Choose Action:");
+                switch (role) {
+                    case TeamLeader:
+                        System.out.println("1- Show Team");
+                        System.out.println("2- Create Task For Employee");
+                        System.out.println("3- Change Personal Details");
+                        System.out.println("4- Add Employee To Team");
+                        System.out.println("5- Show Team's tasks");
+                        System.out.println("6- Show Tasks");
+                        System.out.println("7- Change Task Status");
+                        System.out.println("\n0- <-- Exit");
+                        System.out.println("\n999- <-- \uD83D\uDD01 Logout");
+                        selectActionForTeamLeader(scanner.nextInt(), employeeId);
+                        break;
+                    case MinorWorker:
+                        System.out.println("1- Show Employee Card");
+                        System.out.println("2- Show Tasks");
+                        System.out.println("3- Change Personal Details");
+                        System.out.println("4- Change Task's Status");
+                        System.out.println("\n0- <-- Exit");
+                        System.out.println("\n999- <-- \uD83D\uDD01 Logout");
+                        selectActionForMinorEmployee(scanner.nextInt(), employeeId);
+                        break;
+                    case CEO:
+                    case Root:
+                        System.out.println("1- Add Employee To Company");
+                        System.out.println("2- Show All Employees Cards");
+                        System.out.println("3- Show All Tasks In Company");
+                        System.out.println("4- Delete Employee From Company");
+                        System.out.println("5- Change Salary To Employee");
+                        System.out.println("6- Get Employee Card And His Tasks");
+                        System.out.println("7- Create Task For Employee");
+                        System.out.println("8- Show All Teams In Company");
+                        System.out.println("9- Change Task's Status For Employee");
+                        System.out.println("\n0- <-- Exit");
+                        System.out.println("\n999- <-- \uD83D\uDD01 Logout");
+                        selectActionForRoot(scanner.nextInt());
+                        break;
+                }
             }
-        }
+        } while (toLogout);
+
     }
 
     private void selectActionForRoot(int actionNumber) {
@@ -94,7 +109,13 @@ public class ViewCLI {
             case 8:
                 showAllTeamsInCompany();
                 break;
+            case 9:
+                changeTaskStatusForEmployee();
             case 0:
+                toExit = true;
+                break;
+            case 999:
+                toLogout = true;
                 toExit = true;
                 break;
             default:
@@ -105,7 +126,7 @@ public class ViewCLI {
     private void selectActionForMinorEmployee(int actionNumber, String employeeId) {
         switch (actionNumber) {
             case 1:
-                System.out.println(Controller.getEmployeeByID(employeeId).toString());
+                System.out.println(Controller.getEmployeeByID(employeeId));
                 break;
             case 2:
                 showTasksForEmployee(employeeId);
@@ -113,7 +134,14 @@ public class ViewCLI {
             case 3:
                 changePersonalDetails(employeeId);
                 break;
+            case 4:
+                changeStatusOfTask(employeeId);
+                break;
             case 0:
+                toExit = true;
+                break;
+            case 999:
+                toLogout = true;
                 toExit = true;
                 break;
             default:
@@ -138,7 +166,17 @@ public class ViewCLI {
             case 5:
                 showTeamTasks(teamLeaderId);
                 break;
+            case 6:
+                showTasksForEmployee(teamLeaderId);
+                break;
+            case 7:
+                changeStatusOfTask(teamLeaderId);
+                break;
             case 0:
+                toExit = true;
+                break;
+            case 999:
+                toLogout = true;
                 toExit = true;
                 break;
             default:
@@ -163,8 +201,7 @@ public class ViewCLI {
                             + ", Id: " + employee.getEmployeeId());
                     System.out.println("#--#--#--#--#--#--#--#");
                 });
-            }
-            else{
+            } else {
                 System.out.println("your team is Empty");
             }
         }
@@ -227,8 +264,8 @@ public class ViewCLI {
 
     private void changeEmployeeSalary() {
         String employeeId, newSalary;
+        scanner.nextLine();
         System.out.print("enter the employee id: ");
-        employeeId = scanner.nextLine();
         employeeId = scanner.nextLine();
         System.out.print("New Salary: ");
         newSalary = scanner.nextLine();
@@ -243,9 +280,9 @@ public class ViewCLI {
     }
 
     private void deleteEmployeeFromCompany() {
+        scanner.nextLine();
         System.out.print("enter the employee id: ");
         String employeeId = scanner.nextLine();
-        employeeId = scanner.nextLine();
         Controller.deleteEmployeeById(employeeId);
     }
 
@@ -280,11 +317,35 @@ public class ViewCLI {
 
     }
 
+    private void changeTaskStatusForEmployee() {
+        scanner.nextLine();
+        System.out.println("Please enter employee id:");
+        String employeeId = scanner.nextLine();
+        changeStatusOfTask(employeeId);
+    }
+
+    private void changeStatusOfTask(String employeeId) {
+        String taskId;
+        eStatus status;
+        scanner.nextLine();
+        System.out.println("Enter task id to change Task's status: ");
+        taskId = scanner.nextLine();
+        System.out.println("Choose status: \n0-Not Started \n1-In Process \n2-Finished");
+        status = eStatus.values()[scanner.nextInt()];
+        boolean changeTaskStatus = Controller.changeTaskStatus(employeeId, taskId, status);
+
+        if (changeTaskStatus) {
+            System.out.println("Task's status Updated!");
+        } else {
+            System.out.println("Task's id: " + taskId + ", for employee's id " + employeeId + " not exist!");
+        }
+    }
+
     private void getEmployeeCardAndTasks() {
+        scanner.nextLine();
         System.out.print("Enter Employee id: ");
         String employeeId = scanner.nextLine();
-        employeeId = scanner.nextLine();
-        System.out.println(Controller.getEmployeeByID(employeeId).toString());
+        System.out.println(Controller.getEmployeeByID(employeeId));
         System.out.println("Employee's Tasks: ");
         List<Task> tasksByEmployeeId = Controller.getTasksByEmployeeId(employeeId);
         if (tasksByEmployeeId == null) {
@@ -305,9 +366,9 @@ public class ViewCLI {
     }
 
     private void createTaskForEmployee() {
+        scanner.nextLine();
         System.out.println("Enter employee id to create him Task:");
         String employeeId = scanner.nextLine();
-        employeeId = scanner.nextLine();
         System.out.println(Controller.createTaskForEmployeeById(employeeId).toString());
         System.out.println("New Task Created!");
     }
@@ -324,10 +385,10 @@ public class ViewCLI {
         }
     }
 
-    private void showAllTeamsInCompany(){
+    private void showAllTeamsInCompany() {
         Map<String, List<String>> allTeams = Controller.getAllTeams();
         AtomicInteger indexSize = new AtomicInteger();
-        for(String teamLeaderId : allTeams.keySet()){
+        for (String teamLeaderId : allTeams.keySet()) {
             System.out.println("teamLeaderId: " + teamLeaderId);
             List<String> employeesIdList = allTeams.get(teamLeaderId);
             System.out.print("employee id in this team: [ ");
@@ -338,8 +399,7 @@ public class ViewCLI {
                     System.out.println(id + ", ");
                 } else if (indexSize.get() - 1 == 0) {
                     System.out.println(id);
-                }
-                else{
+                } else {
                     System.out.println("empty team");
                 }
                 indexSize.getAndDecrement();

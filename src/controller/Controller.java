@@ -68,7 +68,6 @@ public class Controller {
                 collect(Collectors.toList());
     }
 
-
     public static void initTasksToEmployees() {
         List<Task> taskList = DataService.getAllTasksList();
         getEmployeeList().forEach(employee -> employee.setNumOfTask(0));
@@ -122,7 +121,8 @@ public class Controller {
         return teamLeadersIds;
     }
 
-    public static void changeTaskStatus(String employeeId, String taskId, eStatus status){
+    public static boolean changeTaskStatus(String employeeId, String taskId, eStatus status){
+        boolean isChanged = false;
         List<Task> allTasks = getAllTasks();
         List<Task> taskOfEmployee = allTasks.stream().
                 filter(task ->
@@ -131,7 +131,10 @@ public class Controller {
         if(taskOfEmployee.size()>0){
             taskOfEmployee.get(0).setStatus(status);
             DataService.saveTasksToDB(allTasks);
+            isChanged = true;
         }
+
+        return isChanged;
     }
 
     public static List<Employee> deleteEmployeeById(String employeeId){
