@@ -5,11 +5,22 @@ import controller.Controller;
 import java.util.Scanner;
 
 public class LoginView {
-    Scanner scanner = new Scanner(System.in);
-    String userName;
-    String password;
+    private static LoginView loginView = null;
+    private Scanner scanner = new Scanner(System.in);
+    private String userName;
+    private String password;
 
-    public String loginAuthenticateUser() {
+    private LoginView(){
+    }
+
+    public static LoginView createLoginViewInstance(){
+        if (loginView == null){
+            loginView = new LoginView();
+        }
+        return loginView;
+    }
+
+     String loginAuthenticateUser() {
         do {
             System.out.println("please enter username and password:");
             System.out.println("username: ");

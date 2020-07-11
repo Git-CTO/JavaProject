@@ -5,6 +5,8 @@ import model.Employee;
 import model.Task;
 import util.eRole;
 import util.eStatus;
+import util.fields.eEmployeeInputFields;
+import util.fields.eTaskInputFields;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class ViewCLI {
 
     void initView() {
         do {
-            String employeeId = new LoginView().loginAuthenticateUser();
+            String employeeId = LoginView.createLoginViewInstance().loginAuthenticateUser();
             eRole role = Controller.loginToSystemByEmployeeId(employeeId);
             Controller.initData();
             toLogout = false;
@@ -49,7 +51,7 @@ public class ViewCLI {
                         System.out.println("5- Show Team's tasks");
                         System.out.println("6- Show Tasks");
                         System.out.println("7- Change Task Status");
-                        System.out.println("\n0- <-- Exit");
+                        System.out.println("\n0- <-- 👋 Exit");
                         System.out.println("\n999- <-- \uD83D\uDD01 Logout");
                         selectActionForTeamLeader(scanner.nextInt(), employeeId);
                         break;
@@ -58,7 +60,7 @@ public class ViewCLI {
                         System.out.println("2- Show Tasks");
                         System.out.println("3- Change Personal Details");
                         System.out.println("4- Change Task's Status");
-                        System.out.println("\n0- <-- Exit");
+                        System.out.println("\n0- <-- 👋 Exit");
                         System.out.println("\n999- <-- \uD83D\uDD01 Logout");
                         selectActionForMinorEmployee(scanner.nextInt(), employeeId);
                         break;
@@ -73,7 +75,7 @@ public class ViewCLI {
                         System.out.println("7- Create Task For Employee");
                         System.out.println("8- Show All Teams In Company");
                         System.out.println("9- Change Task's Status For Employee");
-                        System.out.println("\n0- <-- Exit");
+                        System.out.println("\n0- <-- 👋 Exit");
                         System.out.println("\n999- <-- \uD83D\uDD01 Logout");
                         selectActionForRoot(scanner.nextInt());
                         break;
@@ -274,8 +276,10 @@ public class ViewCLI {
     }
 
     private void insertNewEmployeeToCompany() {
+        Map<eEmployeeInputFields, String> inputFields;
         System.out.println("Insert New Employee To Company EHRP System:");
-        System.out.println(Controller.newEmployee().toString());
+        inputFields = EmployeeCreationUi.createEmployeeCreationUi().getInputFromUserToCreateEmployee();
+        System.out.println(Controller.newEmployee(inputFields).toString());
         System.out.println("new Employee Card Created!");
     }
 

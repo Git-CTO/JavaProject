@@ -7,7 +7,20 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class TaskCreationUI {
-    public Map<eTaskInputFields, String> getInputFromUserToCreateTask(){
+    private static TaskCreationUI taskCreationUI = null;
+
+    private TaskCreationUI() {
+
+    }
+
+    public static TaskCreationUI createTaskCreationUI() {
+        if (taskCreationUI == null) {
+            taskCreationUI = new TaskCreationUI();
+        }
+        return taskCreationUI;
+    }
+
+    public Map<eTaskInputFields, String> getInputFromUserToCreateTask() {
         Scanner scanner = new Scanner(System.in);
         Map<eTaskInputFields, String> inputMap = new HashMap<>();
         System.out.println("--Task Creation--");

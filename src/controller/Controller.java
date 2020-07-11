@@ -7,6 +7,8 @@ import model.Employee;
 import model.Task;
 import util.eRole;
 import util.eStatus;
+import util.fields.eEmployeeInputFields;
+import util.fields.eTaskInputFields;
 import view.EmployeeCreationUi;
 import view.TaskCreationUI;
 
@@ -16,8 +18,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Controller {
-    public static Employee newEmployee() {
-        Employee employee = EmployeeBuilder.builder(new EmployeeCreationUi().getInputFromUserToCreateEmployee());
+    public static Employee newEmployee(Map<eEmployeeInputFields, String> inputFields) {
+        Employee employee = EmployeeBuilder.builder(inputFields);
         DataService.addEmployee(employee);
 
         return employee;
@@ -51,7 +53,7 @@ public class Controller {
     }
 
     public static Task createTaskForEmployeeById(String id) {
-        Task task = TaskBuilder.taskBuilder(new TaskCreationUI().getInputFromUserToCreateTask());
+        Task task = TaskBuilder.taskBuilder(TaskCreationUI.createTaskCreationUI().getInputFromUserToCreateTask());
         List<Task> tasksList = DataService.getAllTasksList();
         task.setEmployeeId(id);
         tasksList.add(task);
