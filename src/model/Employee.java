@@ -7,13 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 public class Employee extends Person {
-    String employeeId;
-    Date startDate;
-    String salary;
-    List<Task> taskList;
-    eRole role;
-    int numOfTask;
-
+    private String employeeId;
+    private Date startDate;
+    private String salary;
+    private List<Task> taskList;
+    private eRole role;
+    private int numOfTask;
 
     public Employee() {
         startDate = new Date();

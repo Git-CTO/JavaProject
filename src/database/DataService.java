@@ -22,20 +22,11 @@ import java.util.stream.Collectors;
 
 public class DataService{
 
-    static DataService dataServiceInstance = null;
     static List<Employee> employeeList;
     static List<Task> taskList;
     static Map<String,List<String>> teams;
 
     private DataService(){
-    }
-
-    public static DataService createDataService(){
-        if(dataServiceInstance==null){
-            dataServiceInstance = new DataService();
-        }
-
-        return dataServiceInstance;
     }
 
     public static void init(){

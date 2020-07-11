@@ -29,7 +29,7 @@ public class EmployeeBuilder {
         return buildEmployee(inputMap, employee);
     }
 
-    public static Employee buildEmployee(Map<eEmployeeInputFields, String> inputMap, Employee employee) {
+    private static Employee buildEmployee(Map<eEmployeeInputFields, String> inputMap, Employee employee) {
         employee.
                 setSalary(inputMap.get(eEmployeeInputFields.Salary)).
                 setRole(eRole.values()[Integer.parseInt(inputMap.get(eEmployeeInputFields.Role))]).

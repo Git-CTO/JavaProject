@@ -5,10 +5,10 @@ import util.eRole;
 import java.util.List;
 
 public class CEO extends Employee implements ITask{
-    List<String> teamLeadersIds;
+    private List<String> teamLeadersIds;
 
     public CEO(){
-        role = eRole.CEO;
+        setRole(eRole.CEO);
     }
 
     public void setTeamLeadersIds(List<String> teamLeadersIds) {

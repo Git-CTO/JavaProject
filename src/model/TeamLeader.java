@@ -1,6 +1,5 @@
 package model;
 
-import builder.TaskBuilder;
 import controller.Controller;
 import util.eRole;
 
@@ -11,7 +10,7 @@ public class TeamLeader extends Employee implements ITask{
     List<String> employeesTeamIds;
 
     public TeamLeader(){
-        role = eRole.TeamLeader;
+        setRole(eRole.TeamLeader);
         employeesTeamIds = new ArrayList<>();
     }
 

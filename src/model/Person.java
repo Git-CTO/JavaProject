@@ -3,18 +3,19 @@ package model;
 import util.eGender;
 
 public abstract class Person {
-    String firstName;
-    String lastName;
-    eGender gender;
-    String address;
-    String phoneNumber;
-    String personalId;
-    int age;
+    private String firstName;
+    private String lastName;
+    private eGender gender;
+    private String address;
+    private String phoneNumber;
+    private String personalId;
+    private int age;
 
     public String toString(){
         return "\n--Personal Information-- " + "\n"
                 + "Name: " + getName() + "\n"
                 + "#Gender: " + gender + "\n"
+                + "#Age: " + age + "\n"
                 + "#Address: " + address + "\n"
                 + "#PhoneNumber: " + phoneNumber + "\n"
                 + "#ID: " + personalId + "\n";
