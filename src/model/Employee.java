@@ -69,4 +69,8 @@ public class Employee extends Person {
     public eRole getRole() {
         return role;
     }
+
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
+    }
 }

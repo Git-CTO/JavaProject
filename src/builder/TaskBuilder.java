@@ -12,7 +12,8 @@ public class TaskBuilder {
     public static Task taskBuilder(Map<eTaskInputFields, String> inputMap) {
         Task task = new Task();
 
-        task.setProjectName(inputMap.get(eTaskInputFields.ProjectName))
+        task
+                .setProjectName(inputMap.get(eTaskInputFields.ProjectName))
                 .setDetails(inputMap.get(eTaskInputFields.Details))
                 .setStatus(eStatus.Not_Started)
                 .setEndDate(new GregorianCalendar(2030, 1, 20).getTime())

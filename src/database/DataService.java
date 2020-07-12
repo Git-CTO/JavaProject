@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import controller.Controller;
 import model.Employee;
 import model.Task;
 
@@ -53,6 +54,11 @@ public class DataService{
         } else {
             employeeList = new ArrayList<>();
         }
+
+        employeeList.forEach(employee -> {
+            employee.setNumOfTask(0);
+            employee.setTaskList(new ArrayList<>());
+        });
 
         return employeeList;
     }
@@ -104,7 +110,6 @@ public class DataService{
             e.printStackTrace();
         }
 
-
         JsonElement jsonElements = JsonParser.parseReader(reader);
         if (!jsonElements.isJsonNull()) {
             Type TaskListType = new TypeToken<List<Task>>() {
@@ -115,6 +120,13 @@ public class DataService{
         }
         DataService.taskList = taskList;
 
+        DataService.taskList.forEach(task -> {
+            Employee employee = Controller.getEmployeeByID(task.getEmployeeId());
+            employee.addTask(task);
+            employee.setNumOfTask(employee.getNumOfTask() + 1);
+        });
+
+        saveEmployeesToDB(DataService.employeeList);
         return taskList;
     }
 

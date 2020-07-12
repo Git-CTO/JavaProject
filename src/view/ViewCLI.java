@@ -212,13 +212,18 @@ public class ViewCLI {
         scanner.nextLine();
         System.out.println("Enter Employee Id To Add Your Team: ");
         String employeeId = scanner.nextLine();
-        Controller.addEmployeeToTeam(teamLeaderId, employeeId);
-        System.out.println("Employee Added your Team!\n");
+        boolean isAlreadyExistInTeam = Controller.addEmployeeToTeam(teamLeaderId, employeeId);
+        if (isAlreadyExistInTeam){
+            System.out.println("\nemployee id: " + employeeId + " is already exist in your team!");
+        }else {
+            System.out.println("Employee Added your Team!\n");
+        }
     }
 
     private void changePersonalDetails(String employeeId) {
         boolean exitBackToMain = false;
         while (!exitBackToMain) {
+            scanner.nextLine();
             System.out.println("Choose Action:");
             System.out.println("1-Change First Name");
             System.out.println("2-Change Last Name");
@@ -227,7 +232,8 @@ public class ViewCLI {
             System.out.println("\n0- <-- Back to main");
             Employee employee = Controller.getEmployeeByID(employeeId);
             String value;
-            switch (scanner.nextInt()) {
+            int numberCase = scanner.nextInt();
+            switch (numberCase) {
                 case 1:
                     scanner.nextLine();
                     System.out.print("New First Name: ");
@@ -287,7 +293,7 @@ public class ViewCLI {
         System.out.print("enter the employee id: ");
         String employeeId = scanner.nextLine();
         Controller.deleteEmployeeById(employeeId);
-        System.out.println("Employee with id: " + employeeId + " deleted from system");
+        System.out.println("\nEmployee with id: " + employeeId + " deleted from system");
     }
 
     private void showAllEmployees() {
@@ -325,7 +331,7 @@ public class ViewCLI {
         List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
         scanner.nextLine();
         System.out.println("change Task's status: \n1-For Employee in your team \n2-For you");
-        int userChosen = Integer.parseInt(scanner.nextLine());
+        int userChosen = scanner.nextInt();
 
         switch (userChosen) {
             case 1:
@@ -364,6 +370,7 @@ public class ViewCLI {
         } else {
             System.out.println("Task's id: " + taskId + ", for employee's id " + employeeId + " not exist!");
         }
+        scanner.nextLine();
     }
 
     private void getEmployeeCardAndTasks() {
@@ -394,8 +401,13 @@ public class ViewCLI {
         scanner.nextLine();
         System.out.println("\nEnter employee id to create him Task:");
         String employeeId = scanner.nextLine();
-        System.out.println(Controller.createTaskForEmployeeById(employeeId).toString());
-        System.out.println("New Task Created!");
+        Task task = Controller.createTaskForEmployeeById(employeeId);
+        if (task != null) {
+            System.out.println(Controller.createTaskForEmployeeById(employeeId));
+            System.out.println("\nNew Task Created!");
+        } else {
+            System.out.println("\nEmployee Id Not Exist!");
+        }
     }
 
     private void createTaskForEmployeeInTeam(String teamLeaderId) {
@@ -424,7 +436,7 @@ public class ViewCLI {
 
             employeesIdList.forEach(id -> {
                 if (indexSize.get() - 1 > 0) {
-                    System.out.println(id + ", ");
+                    System.out.print(id + ", ");
                 } else if (indexSize.get() - 1 == 0) {
                     System.out.print(id);
                 } else {

@@ -31,6 +31,7 @@ public class EmployeeBuilder {
 
     private static Employee buildEmployee(Map<eEmployeeInputFields, String> inputMap, Employee employee) {
         employee.
+                setNumOfTask(0).
                 setSalary(inputMap.get(eEmployeeInputFields.Salary)).
                 setRole(eRole.values()[Integer.parseInt(inputMap.get(eEmployeeInputFields.Role))]).
                 setAddress(inputMap.get(eEmployeeInputFields.Address)).

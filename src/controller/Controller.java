@@ -8,8 +8,6 @@ import model.Task;
 import util.eRole;
 import util.eStatus;
 import util.fields.eEmployeeInputFields;
-import util.fields.eTaskInputFields;
-import view.EmployeeCreationUi;
 import view.TaskCreationUI;
 
 import java.util.ArrayList;
@@ -55,12 +53,18 @@ public class Controller {
     public static Task createTaskForEmployeeById(String id) {
         Task task = TaskBuilder.taskBuilder(TaskCreationUI.createTaskCreationUI().getInputFromUserToCreateTask());
         List<Task> tasksList = DataService.getAllTasksList();
-        task.setEmployeeId(id);
-        tasksList.add(task);
-        DataService.saveTasksToDB(tasksList);
-        initTasksToEmployees();
-        getEmployeeList().forEach(System.out::println);
-
+        List<String> employeesIds = getEmployeeList().stream().map(Employee::getEmployeeId).collect(Collectors.toList());
+        if (employeesIds.contains(id)) {
+            Employee employee = getEmployeeByID(id);
+            employee.setNumOfTask(employee.getNumOfTask() + 1);
+            task.setEmployeeId(id);
+            tasksList.add(task);
+            DataService.saveTasksToDB(tasksList);
+            DataService.saveEmployeesToDB(getEmployeeList());
+        }
+        else{
+            task = null;
+        }
         return task;
     }
 
@@ -70,16 +74,7 @@ public class Controller {
                 collect(Collectors.toList());
     }
 
-    public static void initTasksToEmployees() {
-        List<Task> taskList = DataService.getAllTasksList();
-        getEmployeeList().forEach(employee -> employee.setNumOfTask(0));
 
-        taskList.forEach(task -> {
-            Employee employee = getEmployeeByID(task.getEmployeeId()).addTask(task);
-            employee.setNumOfTask(employee.getNumOfTask() + 1);
-
-        });
-    }
 
     public static boolean authenticateUser(String user, String password){
         boolean isApproved = false;
@@ -176,11 +171,16 @@ public class Controller {
         return null;
     }
 
-    public static void addEmployeeToTeam(String teamLeaderId, String employeeId) {
+    public static boolean addEmployeeToTeam(String teamLeaderId, String employeeId) {
         Map<String, List<String>> allTeams = Controller.getAllTeams();
+        boolean isAlreadyExistInTeam = false;
 
         if (allTeams.containsKey(teamLeaderId)) {
-            allTeams.get(teamLeaderId).add(employeeId);
+            if(allTeams.get(teamLeaderId).contains(employeeId)){
+                isAlreadyExistInTeam = true;
+            }else{
+                allTeams.get(teamLeaderId).add(employeeId);
+            }
         } else {
             List<String> newTeamList = new ArrayList<>();
             newTeamList.add(employeeId);
@@ -188,5 +188,7 @@ public class Controller {
         }
 
         DataService.saveTeamsToDB(allTeams);
+
+        return isAlreadyExistInTeam;
     }
 }
