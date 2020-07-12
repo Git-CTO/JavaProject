@@ -51,8 +51,8 @@ public class ViewCLI {
                         System.out.println("5- Show Team's tasks");
                         System.out.println("6- Show Tasks");
                         System.out.println("7- Change Task Status");
-                        System.out.println("\n0- <-- 👋 Exit");
-                        System.out.println("\n999- <-- \uD83D\uDD01 Logout");
+                        System.out.println("\n0 <-- 👋 Exit");
+                        System.out.println("\n999 <-- \uD83D\uDD01 Logout");
                         selectActionForTeamLeader(scanner.nextInt(), employeeId);
                         break;
                     case MinorWorker:
@@ -60,8 +60,8 @@ public class ViewCLI {
                         System.out.println("2- Show Tasks");
                         System.out.println("3- Change Personal Details");
                         System.out.println("4- Change Task's Status");
-                        System.out.println("\n0- <-- 👋 Exit");
-                        System.out.println("\n999- <-- \uD83D\uDD01 Logout");
+                        System.out.println("\n0 <-- 👋 Exit");
+                        System.out.println("\n999 <-- \uD83D\uDD01 Logout");
                         selectActionForMinorEmployee(scanner.nextInt(), employeeId);
                         break;
                     case CEO:
@@ -75,8 +75,8 @@ public class ViewCLI {
                         System.out.println("7- Create Task For Employee");
                         System.out.println("8- Show All Teams In Company");
                         System.out.println("9- Change Task's Status For Employee");
-                        System.out.println("\n0- <-- 👋 Exit");
-                        System.out.println("\n999- <-- \uD83D\uDD01 Logout");
+                        System.out.println("\n0 <-- 👋 Exit");
+                        System.out.println("\n999 <-- \uD83D\uDD01 Logout");
                         selectActionForRoot(scanner.nextInt());
                         break;
                 }
