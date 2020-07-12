@@ -52,7 +52,7 @@ public class ViewCLI {
                         System.out.println("6- Show Tasks");
                         System.out.println("7- Change Task Status");
                         System.out.println("\n0 <-- 👋 Exit");
-                        System.out.println("\n999 <-- \uD83D\uDD01 Logout");
+                        System.out.println("\n999 <-- \uD83D\uDD01 Logout\n");
                         selectActionForTeamLeader(scanner.nextInt(), employeeId);
                         break;
                     case MinorWorker:
@@ -61,7 +61,7 @@ public class ViewCLI {
                         System.out.println("3- Change Personal Details");
                         System.out.println("4- Change Task's Status");
                         System.out.println("\n0 <-- 👋 Exit");
-                        System.out.println("\n999 <-- \uD83D\uDD01 Logout");
+                        System.out.println("\n999 <-- \uD83D\uDD01 Logout\n");
                         selectActionForMinorEmployee(scanner.nextInt(), employeeId);
                         break;
                     case CEO:
@@ -76,7 +76,7 @@ public class ViewCLI {
                         System.out.println("8- Show All Teams In Company");
                         System.out.println("9- Change Task's Status For Employee");
                         System.out.println("\n0 <-- 👋 Exit");
-                        System.out.println("\n999 <-- \uD83D\uDD01 Logout");
+                        System.out.println("\n999 <-- \uD83D\uDD01 Logout\n");
                         selectActionForRoot(scanner.nextInt());
                         break;
                 }
@@ -307,7 +307,7 @@ public class ViewCLI {
         List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
 
         if (teamLeaderId == null) {
-            System.out.println("no Tasks To show! you Team Is empty, you haven't employees");
+            System.out.println("\no Tasks To show! you Team Is empty, you haven't employees");
         } else {
             teamByTeamLeaderId.forEach(employeeId -> {
                 List<Task> tasksByEmployeeId = Controller.getTasksByEmployeeId(employeeId);
@@ -323,7 +323,7 @@ public class ViewCLI {
 
     private void changeTaskStatusForEmployee() {
         scanner.nextLine();
-        System.out.println("Please enter employee id:");
+        System.out.println("\nPlease enter employee id:");
         String employeeId = scanner.nextLine();
         changeStatusOfTask(employeeId);
     }
@@ -332,7 +332,7 @@ public class ViewCLI {
         String taskId;
         eStatus status;
         scanner.nextLine();
-        System.out.println("Enter task id to change Task's status: ");
+        System.out.println("\nEnter task id to change Task's status: ");
         taskId = scanner.nextLine();
         System.out.println("Choose status: \n0-Not Started \n1-In Process \n2-Finished");
         status = eStatus.values()[scanner.nextInt()];
@@ -347,7 +347,7 @@ public class ViewCLI {
 
     private void getEmployeeCardAndTasks() {
         scanner.nextLine();
-        System.out.print("Enter Employee id: ");
+        System.out.print("\nEnter Employee id: ");
         String employeeId = scanner.nextLine();
         System.out.println(Controller.getEmployeeByID(employeeId));
         System.out.println("Employee's Tasks: ");
@@ -360,7 +360,7 @@ public class ViewCLI {
     }
 
     private void showTasksForEmployee(String employeeId) {
-        System.out.println("Your Tasks: ");
+        System.out.println("\nYour Tasks: ");
         List<Task> tasksForEmployee = Controller.getTasksForEmployee(employeeId);
         if (tasksForEmployee.size() > 0) {
             tasksForEmployee.forEach(System.out::println);
@@ -371,7 +371,7 @@ public class ViewCLI {
 
     private void createTaskForEmployee() {
         scanner.nextLine();
-        System.out.println("Enter employee id to create him Task:");
+        System.out.println("\nEnter employee id to create him Task:");
         String employeeId = scanner.nextLine();
         System.out.println(Controller.createTaskForEmployeeById(employeeId).toString());
         System.out.println("New Task Created!");
@@ -392,6 +392,9 @@ public class ViewCLI {
     private void showAllTeamsInCompany() {
         Map<String, List<String>> allTeams = Controller.getAllTeams();
         AtomicInteger indexSize = new AtomicInteger();
+        if (allTeams.size() == 0){
+            System.out.println("\nThere are no teams in company, or team leader haven't employees");
+        }
         for (String teamLeaderId : allTeams.keySet()) {
             System.out.println("teamLeaderId: " + teamLeaderId);
             List<String> employeesIdList = allTeams.get(teamLeaderId);
