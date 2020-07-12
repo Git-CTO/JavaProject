@@ -405,9 +405,9 @@ public class ViewCLI {
                 if (indexSize.get() - 1 > 0) {
                     System.out.println(id + ", ");
                 } else if (indexSize.get() - 1 == 0) {
-                    System.out.println(id);
+                    System.out.print(id);
                 } else {
-                    System.out.println("empty team");
+                    System.out.print("empty team");
                 }
                 indexSize.getAndDecrement();
             });
