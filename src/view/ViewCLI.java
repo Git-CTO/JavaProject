@@ -6,7 +6,6 @@ import model.Task;
 import util.eRole;
 import util.eStatus;
 import util.fields.eEmployeeInputFields;
-import util.fields.eTaskInputFields;
 
 import java.util.List;
 import java.util.Map;
@@ -112,7 +111,7 @@ public class ViewCLI {
                 showAllTeamsInCompany();
                 break;
             case 9:
-                changeTaskStatusForEmployee();
+                changeTaskStatusForAnyEmployee();
             case 0:
                 toExit = true;
                 break;
@@ -172,8 +171,8 @@ public class ViewCLI {
                 showTasksForEmployee(teamLeaderId);
                 break;
             case 7:
-                changeStatusOfTask(teamLeaderId);
-                break;
+                changeTaskStatusFromTeamLeader(teamLeaderId);
+            break;
             case 0:
                 toExit = true;
                 break;
@@ -210,8 +209,8 @@ public class ViewCLI {
     }
 
     private void addEmployeeToTeam(String teamLeaderId) {
-        System.out.println("Enter Employee Id To Add Your Team: ");
         scanner.nextLine();
+        System.out.println("Enter Employee Id To Add Your Team: ");
         String employeeId = scanner.nextLine();
         Controller.addEmployeeToTeam(teamLeaderId, employeeId);
         System.out.println("Employee Added your Team!\n");
@@ -230,26 +229,26 @@ public class ViewCLI {
             String value;
             switch (scanner.nextInt()) {
                 case 1:
+                    scanner.nextLine();
                     System.out.print("New First Name: ");
-                    value = scanner.nextLine();
                     value = scanner.nextLine();
                     employee.setFirstName(value);
                     break;
                 case 2:
+                    scanner.nextLine();
                     System.out.print("New Last Name: ");
-                    value = scanner.nextLine();
                     value = scanner.nextLine();
                     employee.setLastName(value);
                     break;
                 case 3:
+                    scanner.nextLine();
                     System.out.print("New Address: ");
-                    value = scanner.nextLine();
                     value = scanner.nextLine();
                     employee.setAddress(value);
                     break;
                 case 4:
+                    scanner.nextLine();
                     System.out.print("New Phone Number: ");
-                    value = scanner.nextLine();
                     value = scanner.nextLine();
                     employee.setPhoneNumber(value);
                     break;
@@ -288,6 +287,7 @@ public class ViewCLI {
         System.out.print("enter the employee id: ");
         String employeeId = scanner.nextLine();
         Controller.deleteEmployeeById(employeeId);
+        System.out.println("Employee with id: " + employeeId + " deleted from system");
     }
 
     private void showAllEmployees() {
@@ -321,7 +321,28 @@ public class ViewCLI {
 
     }
 
-    private void changeTaskStatusForEmployee() {
+    private void changeTaskStatusFromTeamLeader(String teamLeaderId){
+        List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
+        scanner.nextLine();
+        System.out.println("change Task's status: \n1-For Employee in your team \n2-For you");
+        int userChosen = Integer.parseInt(scanner.nextLine());
+
+        switch (userChosen) {
+            case 1:
+            if (teamByTeamLeaderId == null) {
+                System.out.println("Your team is empty,  so you can't change Task Status For employee!");
+            } else {
+                System.out.println("There are your employees team ids:");
+                teamByTeamLeaderId.forEach(employeeId -> System.out.println("Id : " + employeeId));
+                changeTaskStatusForAnyEmployee();
+            }
+            break;
+            case 2:
+                changeStatusOfTask(teamLeaderId);
+        }
+    }
+
+    private void changeTaskStatusForAnyEmployee() {
         scanner.nextLine();
         System.out.println("\nPlease enter employee id:");
         String employeeId = scanner.nextLine();
