@@ -261,6 +261,8 @@ public class ViewCLI {
                 case 0:
                     exitBackToMain = true;
                     break;
+                default:
+                    System.out.println("Error! Wrong Number Entered!");
             }
             System.out.println(employee.toString());
             Controller.updateEmployeeList();
@@ -330,8 +332,16 @@ public class ViewCLI {
     private void changeTaskStatusFromTeamLeader(String teamLeaderId){
         List<String> teamByTeamLeaderId = Controller.getTeamByTeamLeaderId(teamLeaderId);
         scanner.nextLine();
-        System.out.println("change Task's status: \n1-For Employee in your team \n2-For you");
-        int userChosen = scanner.nextInt();
+        int userChosen;
+        do {
+            System.out.println("\nchange Task's status: \n1-For Employee in your team \n2-For you");
+             userChosen = scanner.nextInt();
+             if (userChosen < 1 || userChosen > 2){
+                 System.out.println("\nWrong number!");
+             }
+        } while (userChosen < 1 || userChosen > 2);
+
+
 
         switch (userChosen) {
             case 1:
@@ -358,10 +368,17 @@ public class ViewCLI {
     private void changeStatusOfTask(String employeeId) {
         String taskId;
         eStatus status;
+        int userChosen;
         scanner.nextLine();
         System.out.println("\nEnter task id to change Task's status: ");
         taskId = scanner.nextLine();
-        System.out.println("Choose status: \n0-Not Started \n1-In Process \n2-Finished");
+        do {
+            System.out.println("\nChoose status: \n0-Not Started \n1-In Process \n2-Finished");
+            userChosen = scanner.nextInt();
+            if (userChosen < 0 || userChosen > 2){
+                System.out.println("\nWrong number!");
+            }
+        }while (userChosen < 0 || userChosen > 2);
         status = eStatus.values()[scanner.nextInt()];
         boolean changeTaskStatus = Controller.changeTaskStatus(employeeId, taskId, status);
 
